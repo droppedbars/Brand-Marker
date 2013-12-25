@@ -43,7 +43,7 @@ License: GPLv2
 	define("FNC_SANITIZE_OPTS",	'brand_sanitize_options');
 	define("FNC_SETTINGS_PAGE",	'brand_settings_page');
 
-	/* Assign the hooks */
+	/* Associate WordPress hooks with functions */
 	register_activation_hook(__FILE__, FNC_INSTALL);
 	add_action(WP_PLUGIN_INIT, FNC_INIT);
 	add_action(WP_PLUGIN_ADMIN_MENU, FNC_ADMIN_MENU);
@@ -59,6 +59,7 @@ License: GPLv2
 	define("BRD_SETTINGS_PAGE_URL",		'brand-settings');
 
 	/* Brand marks */
+	// TODO: turn this into an array or hash
 	define("TRADE_MARK",	'&#8482;');
 	define("REG_MARK",		'&reg;');
 	define("REG_MARK_2",	'®');
@@ -85,28 +86,41 @@ License: GPLv2
 		improve settings page
 	*/
 
+	/* 
+		Called via the install hook.
+		Ensure this plugin is compatible with the WordPress version.
+		Set the defaul option values and store them into the database.
+	*/
 	function brand_marker_install() {
 		//check version compatibility
-
-		//setup default option values
+		// TODO
+		// setup default option values
 		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => TRADE_MARK);
-
+		// update the database with the default option values
 		update_option (BRD_MARKS, $brand_marks_arr);
 	}
 
-	// Initialize the Brand Marker
+	/*
+		Called via the init hook.
+	*/
 	function brand_marker_init() {
 		// nothing to initialize for this plugin
 	}
 
-	// create the Brand Marker sub-menu
+	/*
+		Called via the admin menu hook.
+		Define and create the submenu item for the plugin under options menu
+	*/
 	function brand_marker_menu() {
 		add_options_page( __(BRD_SETTINGS_PAGE_NAME, PLUGIN_TAG), 
 			__(BRD_SETTINGS_NAME, PLUGIN_TAG), 
 			WP_USER_MANAGE_OPTS, BRD_SETTINGS_PAGE_URL, FNC_SETTINGS_PAGE);
 	}
 
-	// build the plugin settings page
+	/*
+		Called via the appropriate sub-menu hook.
+		Create the settings page for the plugin
+	*/
 	function brand_settings_page() {
 		if ( !current_user_can(WP_USER_MANAGE_OPTS) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
@@ -135,7 +149,9 @@ License: GPLv2
 		echo '</div>';
 	}
 
-
+	/*
+		Store the settings after the user has submitted the settings form.
+	*/
 	function brand_marker_register_settings() {
 		// register settings
 		register_setting(BRD_SETTINGS, BRD_MARKS, FNC_SANITIZE_OPTS);
@@ -146,15 +162,24 @@ License: GPLv2
 		return $options;
 	}
 
+	/*
+		Search $content string for all occurances of $brand and remove $symbol if it trails it.
+	*/
 	function brand_removebranding ($content, $brand, $symbol)
 	{
 		return preg_replace('/\b('.$brand.')'.addslashes($symbol).'/', '${1}', $content);
 	}
 
+	/*
+		Search $content for all occurances of $brand and ad $symbol after it.
+	*/
 	function brand_addbrand ($content, $brand, $symbol) {
 		return preg_replace('/\b('.$brand.')\b/', '${1}'.addslashes($symbol), $content);
 	}
 
+	/*
+		Parse $content, ensuring occurances of $brand have the appropriate trademark symbol afterwards
+	*/
 	function brand_setbranding ($content, $brand, $symbol) {
 		$temp_storage = brand_removebranding($content, $brand, TRADE_MARK);
 		$temp_storage = brand_removebranding($temp_storage, $brand, TRADE_MARK_2);
@@ -169,6 +194,10 @@ License: GPLv2
 		return brand_addbrand($temp_storage, $brand, $symbol);
 	}
 
+	/*
+		Called via update_post hook.
+		Ensures the branding matches the plugin options for the updated post.
+	*/
 	function brand_update_post( $post_id ) {
 		// load options
 		$brand_marks_arr = get_option(BRD_MARKS);
