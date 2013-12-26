@@ -60,20 +60,25 @@ License: GPLv2
 
 	/* Brand marks */
 	// TODO: turn this into an array or hash
-	define("TRADE_MARK",	'&#8482;');
-	define("REG_MARK",		'&reg;');
-	define("REG_MARK_2",	'®');
-	define("REG_MARK_3",	'&#174;');
-	define("REG_MARK_4",	'&reg'); // must occur after &reg; when being removed
-	define("REG_MARK_5",	'&#174'); // must occur after &#174; when being removed
-	define("TRADE_MARK_2",	'™');
-	define("TRADE_MARK_3",	'&trade;');
-	define("TRADE_MARK_4",	'&trade'); // must occur after &trade; when being removed
-	define("TRADE_MARK_5",	'&#8482'); // must occur after &#8482; when being removed
+	$REG_MARK = array(
+		'&reg;',
+		'&reg',
+		'®',
+		'&#174;',
+		'&#174'
+	);
+	$TRADE_MARK = array(
+		'&trade;',
+		'&trade',
+		'™',
+		'&#8482;',
+		'&#8482'
+	); 
+	define("REG_MARK",   '&reg;');
+	define("TRADE_MARK", '&trade;');
 
 	/*
 	TODO: 
-		move brand marks into a loop
 		sanitize all inputs and outputs
 		support multiple brands
 		support for nested brands ('FOO(R)' and 'FOO BAR(R)' are brands, but don't want 'FOO(R) BAR(R)')
@@ -92,10 +97,11 @@ License: GPLv2
 		Set the defaul option values and store them into the database.
 	*/
 	function brand_marker_install() {
+		global $TRADE_MARK;
 		//check version compatibility
 		// TODO
 		// setup default option values
-		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => TRADE_MARK);
+		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK');
 		// update the database with the default option values
 		update_option (BRD_MARKS, $brand_marks_arr);
 	}
@@ -122,6 +128,9 @@ License: GPLv2
 		Create the settings page for the plugin
 	*/
 	function brand_settings_page() {
+		global $REG_MARK;
+		global $TRADE_MARK;
+
 		if ( !current_user_can(WP_USER_MANAGE_OPTS) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}	
@@ -133,10 +142,10 @@ License: GPLv2
 
 		// create form
 		echo '<H1>Brand Marker</H1>';
-		echo '<H3>List the brandnames that you want &reg; or &#8482; to appear after.';
+		echo '<H3>List the brandnames that you want '.REG_MARK.' or '.TRADE_MARK.' to appear after.';
 		echo '<div class="wrap">';
 		echo '	<form method="post" action="options.php">';
-		echo settings_fields( BRD_SETTINGS);
+		echo settings_fields(BRD_SETTINGS);
 		echo '		<input type="text" name="'.BRD_MARKS.'[brand_1]" value="'.esc_attr( $firstbrand ).'" size="24">';
 		echo '		<select name="'.BRD_MARKS.'[mark_1]">';
 		echo '			<option value="REG_MARK" '.selected($firstmark, "REG_MARK").'>'.REG_MARK.'</option>';
@@ -181,16 +190,15 @@ License: GPLv2
 		Parse $content, ensuring occurances of $brand have the appropriate trademark symbol afterwards
 	*/
 	function brand_setbranding ($content, $brand, $symbol) {
-		$temp_storage = brand_removebranding($content, $brand, TRADE_MARK);
-		$temp_storage = brand_removebranding($temp_storage, $brand, TRADE_MARK_2);
-		$temp_storage = brand_removebranding($temp_storage, $brand, TRADE_MARK_3);
-		$temp_storage = brand_removebranding($temp_storage, $brand, TRADE_MARK_4);
-		$temp_storage = brand_removebranding($temp_storage, $brand, TRADE_MARK_5);
-		$temp_storage = brand_removebranding($temp_storage, $brand, REG_MARK);
-		$temp_storage = brand_removebranding($temp_storage, $brand, REG_MARK_2);
-		$temp_storage = brand_removebranding($temp_storage, $brand, REG_MARK_3);
-		$temp_storage = brand_removebranding($temp_storage, $brand, REG_MARK_4);
-		$temp_storage = brand_removebranding($temp_storage, $brand, REG_MARK_5);
+		global $REG_MARK;
+		global $TRADE_MARK;
+
+		$temp_storage = $content;
+
+		foreach($REG_MARK as $value) 
+			$temp_storage = brand_removebranding($temp_storage, $brand, $value);
+		foreach($TRADE_MARK as $value)
+			$temp_storage = brand_removebranding($temp_storage, $brand, $value);
 		return brand_addbrand($temp_storage, $brand, $symbol);
 	}
 
@@ -201,6 +209,7 @@ License: GPLv2
 	function brand_update_post( $post_id ) {
 		// load options
 		$brand_marks_arr = get_option(BRD_MARKS);
+
 		// set options to variables
 		$firstbrand = $brand_marks_arr['brand_1'];
 		$firstmark = $brand_marks_arr['mark_1'];
