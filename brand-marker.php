@@ -59,7 +59,6 @@ License: GPLv2
 	define("BRD_SETTINGS_PAGE_URL",		'brand-settings');
 
 	/* Brand marks */
-	// TODO: turn this into an array or hash
 	$REG_MARK = array(
 		'&reg;',
 		'&reg',
