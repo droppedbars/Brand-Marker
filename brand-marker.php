@@ -96,7 +96,6 @@ License: GPLv2
 		Set the defaul option values and store them into the database.
 	*/
 	function brand_marker_install() {
-		global $TRADE_MARK;
 		//check version compatibility
 		// TODO
 		// setup default option values
@@ -127,9 +126,6 @@ License: GPLv2
 		Create the settings page for the plugin
 	*/
 	function brand_settings_page() {
-		global $REG_MARK;
-		global $TRADE_MARK;
-
 		if ( !current_user_can(WP_USER_MANAGE_OPTS) )  {
 			wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 		}	
@@ -144,7 +140,7 @@ License: GPLv2
 		echo '<H3>List the brandnames that you want '.REG_MARK.' or '.TRADE_MARK.' to appear after.';
 		echo '<div class="wrap">';
 		echo '	<form method="post" action="options.php">';
-		echo settings_fields(BRD_SETTINGS);
+		settings_fields(BRD_SETTINGS);
 		echo '		<input type="text" name="'.BRD_MARKS.'[brand_1]" value="'.esc_attr( $firstbrand ).'" size="24">';
 		echo '		<select name="'.BRD_MARKS.'[mark_1]">';
 		echo '			<option value="REG_MARK" '.selected($firstmark, "REG_MARK").'>'.REG_MARK.'</option>';
