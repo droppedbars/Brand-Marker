@@ -75,6 +75,7 @@ License: GPLv2
 	); 
 	define("REG_MARK",   '&reg;');
 	define("TRADE_MARK", '&trade;');
+    define("BLANK",      '');
 
 	/*
 	TODO: 
@@ -99,7 +100,11 @@ License: GPLv2
 		//check version compatibility
 		// TODO
 		// setup default option values
-		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK');
+		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK',
+                                'brand_2' => '', 'mark_2' => '',
+                                'brand_3' => '', 'mark_3' => '',
+                                'brand_4' => '', 'mark_4' => '',
+                                'brand_5' => '', 'mark_5' => '');
 		// update the database with the default option values
 		update_option (BRD_MARKS, $brand_marks_arr);
 	}
@@ -132,8 +137,16 @@ License: GPLv2
 		// load options
 		$brand_marks_arr = get_option(BRD_MARKS);
 		// set options to variables
-		$firstbrand = $brand_marks_arr['brand_1'];
-		$firstmark = $brand_marks_arr['mark_1'];
+		$brand_1 = $brand_marks_arr['brand_1'];
+		$mark_1 = $brand_marks_arr['mark_1'];
+        $brand_2 = $brand_marks_arr['brand_2'];
+        $mark_2 = $brand_marks_arr['mark_2'];
+        $brand_3 = $brand_marks_arr['brand_3'];
+        $mark_3 = $brand_marks_arr['mark_3'];
+        $brand_4 = $brand_marks_arr['brand_4'];
+        $mark_4 = $brand_marks_arr['mark_4'];
+        $brand_5 = $brand_marks_arr['brand_5'];
+        $mark_5 = $brand_marks_arr['mark_5'];
 
 		// create form
 		echo '<H1>Brand Marker</H1>';
@@ -141,12 +154,43 @@ License: GPLv2
 		echo '<div class="wrap">';
 		echo '	<form method="post" action="options.php">';
 		settings_fields(BRD_SETTINGS);
-		echo '		<input type="text" name="'.BRD_MARKS.'[brand_1]" value="'.esc_attr( $firstbrand ).'" size="24">';
+		echo '		<input type="text" name="'.BRD_MARKS.'[brand_1]" value="'.esc_attr( $brand_1 ).'" size="24">';
 		echo '		<select name="'.BRD_MARKS.'[mark_1]">';
-		echo '			<option value="REG_MARK" '.selected($firstmark, "REG_MARK").'>'.REG_MARK.'</option>';
-		echo '			<option value="TRADE_MARK" '.selected($firstmark, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
-		echo '		</select>';
-		echo '		<input type="submit" class="button-primary" value="';
+        echo '			<option value="BLANK" '.selected($mark_1, "BLANK").'>'.BLANK.'</option>';
+		echo '			<option value="REG_MARK" '.selected($mark_1, "REG_MARK").'>'.REG_MARK.'</option>';
+		echo '			<option value="TRADE_MARK" '.selected($mark_1, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
+		echo '		</select><br>';
+
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_2]" value="'.esc_attr( $brand_2 ).'" size="24">';
+        echo '		<select name="'.BRD_MARKS.'[mark_2]">';
+        echo '			<option value="BLANK" '.selected($mark_2, "BLANK").'>'.BLANK.'</option>';
+        echo '			<option value="REG_MARK" '.selected($mark_2, "REG_MARK").'>'.REG_MARK.'</option>';
+        echo '			<option value="TRADE_MARK" '.selected($mark_2, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
+        echo '		</select><br>';
+
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_3]" value="'.esc_attr( $brand_3 ).'" size="24">';
+        echo '		<select name="'.BRD_MARKS.'[mark_3]">';
+        echo '			<option value="BLANK" '.selected($mark_3, "BLANK").'>'.BLANK.'</option>';
+        echo '			<option value="REG_MARK" '.selected($mark_3, "REG_MARK").'>'.REG_MARK.'</option>';
+        echo '			<option value="TRADE_MARK" '.selected($mark_3, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
+        echo '		</select><br>';
+
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_4]" value="'.esc_attr( $brand_4 ).'" size="24">';
+        echo '		<select name="'.BRD_MARKS.'[mark_4]">';
+        echo '			<option value="BLANK" '.selected($mark_4, "BLANK").'>'.BLANK.'</option>';
+        echo '			<option value="REG_MARK" '.selected($mark_4, "REG_MARK").'>'.REG_MARK.'</option>';
+        echo '			<option value="TRADE_MARK" '.selected($mark_4, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
+        echo '		</select><br>';
+
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_5]" value="'.esc_attr( $brand_5 ).'" size="24">';
+        echo '		<select name="'.BRD_MARKS.'[mark_5]">';
+        echo '			<option value="BLANK" '.selected($mark_5, "BLANK").'>'.BLANK.'</option>';
+        echo '			<option value="REG_MARK" '.selected($mark_5, "REG_MARK").'>'.REG_MARK.'</option>';
+        echo '			<option value="TRADE_MARK" '.selected($mark_5, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
+        echo '		</select></br>';
+
+
+        echo '		<input type="submit" class="button-primary" value="';
 		_e( 'Save Changes', PLUGIN_TAG) ;
 		echo '" />';
 		echo '	</form>';
@@ -206,22 +250,44 @@ License: GPLv2
 		$brand_marks_arr = get_option(BRD_MARKS);
 
 		// set options to variables
-		$firstbrand = $brand_marks_arr['brand_1'];
-		$firstmark = $brand_marks_arr['mark_1'];
+		$brand_1 = $brand_marks_arr['brand_1'];
+		$mark_1 = $brand_marks_arr['mark_1'];
+        $brand_2 = $brand_marks_arr['brand_2'];
+        $mark_2 = $brand_marks_arr['mark_2'];
+        $brand_3 = $brand_marks_arr['brand_3'];
+        $mark_3 = $brand_marks_arr['mark_3'];
+        $brand_4 = $brand_marks_arr['brand_4'];
+        $mark_4 = $brand_marks_arr['mark_4'];
+        $brand_5 = $brand_marks_arr['brand_5'];
+        $mark_5 = $brand_marks_arr['mark_5'];
 
 		// get the post
 		$post = get_post($post_id, ARRAY_A);
 		// perform regex on title
-		$post['post_title'] = brand_setbranding($post['post_title'], $firstbrand, constant($firstmark));
-		// perform regex on the content
-		$post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $firstbrand, constant($firstmark));
-		$post['post_content'] = brand_setbranding($post['post_content'], $firstbrand, constant($firstmark));
+		$post['post_title']   = brand_setbranding($post['post_title'], $brand_1, constant($mark_1));
+		$post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_1, constant($mark_1));
+		$post['post_content'] = brand_setbranding($post['post_content'], $brand_1, constant($mark_1));
 
-		// remove and re-add the hook to prevent infinite loops
+        $post['post_title']   = brand_setbranding($post['post_title'], $brand_2, constant($mark_2));
+        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_2, constant($mark_2));
+        $post['post_content'] = brand_setbranding($post['post_content'], $brand_2, constant($mark_2));
+
+        $post['post_title']   = brand_setbranding($post['post_title'], $brand_3, constant($mark_3));
+        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_3, constant($mark_3));
+        $post['post_content'] = brand_setbranding($post['post_content'], $brand_3, constant($mark_3));
+
+        $post['post_title']   = brand_setbranding($post['post_title'], $brand_4, constant($mark_4));
+        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_4, constant($mark_4));
+        $post['post_content'] = brand_setbranding($post['post_content'], $brand_4, constant($mark_4));
+
+        $post['post_title']   = brand_setbranding($post['post_title'], $brand_5, constant($mark_5));
+        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_5, constant($mark_5));
+        $post['post_content'] = brand_setbranding($post['post_content'], $brand_5, constant($mark_5));
+
+        // remove and re-add the hook to prevent infinite loops
 		remove_action(WP_PLUGIN_PUBLISH_POST, FNC_UPDATE_POST);
 		wp_update_post($post);
 		add_action(WP_PLUGIN_PUBLISH_POST, FNC_UPDATE_POST);
 
 		return $post_id;
 	}
-?>
