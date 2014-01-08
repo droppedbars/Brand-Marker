@@ -3,7 +3,7 @@
 Plugin Name: Brand Marker
 Plugin URI: http://
 Description: Automatically add TM or (R) to specified text in posts.
-Version: 0.1
+Version: 0.1.1
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
