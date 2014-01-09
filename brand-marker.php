@@ -3,7 +3,7 @@
 Plugin Name: Brand Marker
 Plugin URI: http://
 Description: Automatically add TM or (R) to specified text in posts.
-Version: 0.1.1
+Version: 0.2
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
@@ -31,7 +31,7 @@ License: GPLv2
 	define("WP_PLUGIN_ADMIN_INIT",		'admin_init');
 	define("WP_PLUGIN_PUBLISH_POST",	'publish_post');
 	// need 'publish_page' as well for pages?
-	// alternate use 'the_post' hook, "gets object after query"
+    define("WP_THE_POST",               'the_post');
 	define("WP_USER_MANAGE_OPTS",		'manage_options');
 
 	/* Function Names */
@@ -39,7 +39,6 @@ License: GPLv2
 	define("FNC_INIT",			'brand_marker_init');
 	define("FNC_ADMIN_MENU",	'brand_marker_menu');
 	define("FNC_REG_SETTINGS",	'brand_marker_register_settings');
-	define("FNC_UPDATE_POST",	'brand_update_post');
 	define("FNC_SANITIZE_OPTS",	'brand_sanitize_options');
 	define("FNC_SETTINGS_PAGE",	'brand_settings_page');
 
@@ -48,7 +47,9 @@ License: GPLv2
 	add_action(WP_PLUGIN_INIT, FNC_INIT);
 	add_action(WP_PLUGIN_ADMIN_MENU, FNC_ADMIN_MENU);
 	add_action(WP_PLUGIN_ADMIN_INIT, FNC_REG_SETTINGS);
-	add_action(WP_PLUGIN_PUBLISH_POST, FNC_UPDATE_POST);
+    add_filter('the_content', 'brand_update_content');
+    add_filter('the_excerpt', 'brand_update_excerpt');
+    add_filter('the_title',   'brand_update_title');
 
 	/* Plugin Variables and Attributes */
 	define("PLUGIN_TAG",				'brand_marker');
@@ -78,28 +79,13 @@ License: GPLv2
     define("BLANK",      '');
 
 	/*
-	TODO: 
-		sanitize all inputs and outputs
-		support multiple brands
-		support for nested brands ('FOO(R)' and 'FOO BAR(R)' are brands, but don't want 'FOO(R) BAR(R)')
-		support dynamic number of brands
-		check authorization levels
-		make work for multi-site
-		create uninstall script
-		perform brand marking on view instead of publish
-		improve comments
-		improve settings page
-	*/
-
-	/* 
 		Called via the install hook.
 		Ensure this plugin is compatible with the WordPress version.
 		Set the defaul option values and store them into the database.
 	*/
 	function brand_marker_install() {
 		//check version compatibility
-		// TODO
-		// setup default option values
+		// TODO setup default option values
 		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK',
                                 'brand_2' => '', 'mark_2' => '',
                                 'brand_3' => '', 'mark_3' => '',
@@ -241,53 +227,83 @@ License: GPLv2
 		return brand_addbrand($temp_storage, $brand, $symbol);
 	}
 
-	/*
-		Called via update_post hook.
-		Ensures the branding matches the plugin options for the updated post.
-	*/
-	function brand_update_post( $post_id ) {
-		// load options
-		$brand_marks_arr = get_option(BRD_MARKS);
+/*
+ * Update the content with branding
+ */
+function brand_update_content($content) {
+    $brand_marks_arr = get_option(BRD_MARKS);
 
-		// set options to variables
-		$brand_1 = $brand_marks_arr['brand_1'];
-		$mark_1 = $brand_marks_arr['mark_1'];
-        $brand_2 = $brand_marks_arr['brand_2'];
-        $mark_2 = $brand_marks_arr['mark_2'];
-        $brand_3 = $brand_marks_arr['brand_3'];
-        $mark_3 = $brand_marks_arr['mark_3'];
-        $brand_4 = $brand_marks_arr['brand_4'];
-        $mark_4 = $brand_marks_arr['mark_4'];
-        $brand_5 = $brand_marks_arr['brand_5'];
-        $mark_5 = $brand_marks_arr['mark_5'];
+    // set options to variables
+    $brand_1 = $brand_marks_arr['brand_1'];
+    $mark_1 = $brand_marks_arr['mark_1'];
+    $brand_2 = $brand_marks_arr['brand_2'];
+    $mark_2 = $brand_marks_arr['mark_2'];
+    $brand_3 = $brand_marks_arr['brand_3'];
+    $mark_3 = $brand_marks_arr['mark_3'];
+    $brand_4 = $brand_marks_arr['brand_4'];
+    $mark_4 = $brand_marks_arr['mark_4'];
+    $brand_5 = $brand_marks_arr['brand_5'];
+    $mark_5 = $brand_marks_arr['mark_5'];
 
-		// get the post
-		$post = get_post($post_id, ARRAY_A);
-		// perform regex on title
-		$post['post_title']   = brand_setbranding($post['post_title'], $brand_1, constant($mark_1));
-		$post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_1, constant($mark_1));
-		$post['post_content'] = brand_setbranding($post['post_content'], $brand_1, constant($mark_1));
+    $content = brand_setbranding($content, $brand_1, constant($mark_1));
+    $content = brand_setbranding($content, $brand_2, constant($mark_2));
+    $content = brand_setbranding($content, $brand_3, constant($mark_3));
+    $content = brand_setbranding($content, $brand_4, constant($mark_4));
+    $content = brand_setbranding($content, $brand_5, constant($mark_5));
 
-        $post['post_title']   = brand_setbranding($post['post_title'], $brand_2, constant($mark_2));
-        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_2, constant($mark_2));
-        $post['post_content'] = brand_setbranding($post['post_content'], $brand_2, constant($mark_2));
+    return $content;
+}
 
-        $post['post_title']   = brand_setbranding($post['post_title'], $brand_3, constant($mark_3));
-        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_3, constant($mark_3));
-        $post['post_content'] = brand_setbranding($post['post_content'], $brand_3, constant($mark_3));
+/*
+ * Update the excerpt with branding
+ */
+function brand_update_excerpt($excerpt) {
+    $brand_marks_arr = get_option(BRD_MARKS);
 
-        $post['post_title']   = brand_setbranding($post['post_title'], $brand_4, constant($mark_4));
-        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_4, constant($mark_4));
-        $post['post_content'] = brand_setbranding($post['post_content'], $brand_4, constant($mark_4));
+    // set options to variables
+    $brand_1 = $brand_marks_arr['brand_1'];
+    $mark_1 = $brand_marks_arr['mark_1'];
+    $brand_2 = $brand_marks_arr['brand_2'];
+    $mark_2 = $brand_marks_arr['mark_2'];
+    $brand_3 = $brand_marks_arr['brand_3'];
+    $mark_3 = $brand_marks_arr['mark_3'];
+    $brand_4 = $brand_marks_arr['brand_4'];
+    $mark_4 = $brand_marks_arr['mark_4'];
+    $brand_5 = $brand_marks_arr['brand_5'];
+    $mark_5 = $brand_marks_arr['mark_5'];
 
-        $post['post_title']   = brand_setbranding($post['post_title'], $brand_5, constant($mark_5));
-        $post['post_excerpt'] = brand_setbranding($post['post_excerpt'], $brand_5, constant($mark_5));
-        $post['post_content'] = brand_setbranding($post['post_content'], $brand_5, constant($mark_5));
+    $excerpt = brand_setbranding($excerpt, $brand_1, constant($mark_1));
+    $excerpt = brand_setbranding($excerpt, $brand_2, constant($mark_2));
+    $excerpt = brand_setbranding($excerpt, $brand_3, constant($mark_3));
+    $excerpt = brand_setbranding($excerpt, $brand_4, constant($mark_4));
+    $excerpt = brand_setbranding($excerpt, $brand_5, constant($mark_5));
 
-        // remove and re-add the hook to prevent infinite loops
-		remove_action(WP_PLUGIN_PUBLISH_POST, FNC_UPDATE_POST);
-		wp_update_post($post);
-		add_action(WP_PLUGIN_PUBLISH_POST, FNC_UPDATE_POST);
+    return $excerpt;
+}
 
-		return $post_id;
-	}
+/*
+ * Update the title with branding
+ */
+function brand_update_title($title) {
+    $brand_marks_arr = get_option(BRD_MARKS);
+
+    // set options to variables
+    $brand_1 = $brand_marks_arr['brand_1'];
+    $mark_1 = $brand_marks_arr['mark_1'];
+    $brand_2 = $brand_marks_arr['brand_2'];
+    $mark_2 = $brand_marks_arr['mark_2'];
+    $brand_3 = $brand_marks_arr['brand_3'];
+    $mark_3 = $brand_marks_arr['mark_3'];
+    $brand_4 = $brand_marks_arr['brand_4'];
+    $mark_4 = $brand_marks_arr['mark_4'];
+    $brand_5 = $brand_marks_arr['brand_5'];
+    $mark_5 = $brand_marks_arr['mark_5'];
+
+    $title = brand_setbranding($title, $brand_1, constant($mark_1));
+    $title = brand_setbranding($title, $brand_2, constant($mark_2));
+    $title = brand_setbranding($title, $brand_3, constant($mark_3));
+    $title = brand_setbranding($title, $brand_4, constant($mark_4));
+    $title = brand_setbranding($title, $brand_5, constant($mark_5));
+
+    return $title;
+}
