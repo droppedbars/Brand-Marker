@@ -274,21 +274,22 @@ function brand_update_content($content) {
 
 /*
  * Update the excerpt with branding
+ * Escapes only the trademarks since they get printed onto the HTML.  The brand itself is not printed, so not escaped.
  */
 function brand_update_excerpt($excerpt) {
     $brand_marks_arr = get_option(BRD_MARKS);
 
     // set options to variables
     $brand_1 = $brand_marks_arr['brand_1'];
-    $mark_1 = $brand_marks_arr['mark_1'];
+    $mark_1 = esc_html($brand_marks_arr['mark_1']);
     $brand_2 = $brand_marks_arr['brand_2'];
-    $mark_2 = $brand_marks_arr['mark_2'];
+    $mark_2 = esc_html($brand_marks_arr['mark_2']);
     $brand_3 = $brand_marks_arr['brand_3'];
-    $mark_3 = $brand_marks_arr['mark_3'];
+    $mark_3 = esc_html($brand_marks_arr['mark_3']);
     $brand_4 = $brand_marks_arr['brand_4'];
-    $mark_4 = $brand_marks_arr['mark_4'];
+    $mark_4 = esc_html($brand_marks_arr['mark_4']);
     $brand_5 = $brand_marks_arr['brand_5'];
-    $mark_5 = $brand_marks_arr['mark_5'];
+    $mark_5 = esc_html($brand_marks_arr['mark_5']);
 
     $excerpt = brand_setbranding($excerpt, $brand_1, constant($mark_1));
     $excerpt = brand_setbranding($excerpt, $brand_2, constant($mark_2));
@@ -301,21 +302,22 @@ function brand_update_excerpt($excerpt) {
 
 /*
  * Update the title with branding
+ * Escapes only the trademarks since they get printed onto the HTML.  The brand itself is not printed, so not escaped.
  */
 function brand_update_title($title) {
     $brand_marks_arr = get_option(BRD_MARKS);
 
     // set options to variables
     $brand_1 = $brand_marks_arr['brand_1'];
-    $mark_1 = $brand_marks_arr['mark_1'];
+    $mark_1 = esc_html($brand_marks_arr['mark_1']);
     $brand_2 = $brand_marks_arr['brand_2'];
-    $mark_2 = $brand_marks_arr['mark_2'];
+    $mark_2 = esc_html($brand_marks_arr['mark_2']);
     $brand_3 = $brand_marks_arr['brand_3'];
-    $mark_3 = $brand_marks_arr['mark_3'];
+    $mark_3 = esc_html($brand_marks_arr['mark_3']);
     $brand_4 = $brand_marks_arr['brand_4'];
-    $mark_4 = $brand_marks_arr['mark_4'];
+    $mark_4 = esc_html($brand_marks_arr['mark_4']);
     $brand_5 = $brand_marks_arr['brand_5'];
-    $mark_5 = $brand_marks_arr['mark_5'];
+    $mark_5 = esc_html($brand_marks_arr['mark_5']);
 
     $title = brand_setbranding($title, $brand_1, constant($mark_1));
     $title = brand_setbranding($title, $brand_2, constant($mark_2));
