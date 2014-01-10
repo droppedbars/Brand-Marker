@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Brand Marker
-Plugin URI: http://
+Plugin URI: http://github.com/droppedbars/Brand-Marker
 Description: Automatically add TM or (R) to specified text in posts.
 Version: 0.2
 Author: Patrick Mauro
@@ -30,7 +30,6 @@ License: GPLv2
 	define("WP_PLUGIN_ADMIN_MENU",		'admin_menu');
 	define("WP_PLUGIN_ADMIN_INIT",		'admin_init');
 	define("WP_PLUGIN_PUBLISH_POST",	'publish_post');
-	// need 'publish_page' as well for pages?
     define("WP_THE_POST",               'the_post');
 	define("WP_USER_MANAGE_OPTS",		'manage_options');
 
@@ -84,8 +83,7 @@ License: GPLv2
 		Set the default option values and store them into the database.
 	*/
 	function brand_marker_install() {
-		//check version compatibility
-		// TODO setup default option values
+		// TODO: check version compatibility
 		$brand_marks_arr = array('brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK',
                                 'brand_2' => '', 'mark_2' => '',
                                 'brand_3' => '', 'mark_3' => '',
