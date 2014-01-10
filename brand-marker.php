@@ -74,14 +74,14 @@ License: GPLv2
 		'&#8482;',
 		'&#8482'
 	); 
-	define("REG_MARK",   '&reg;');
-	define("TRADE_MARK", '&trade;');
-    define("BLANK",      '');
+	define('REG_MARK',   '&reg;');
+	define('TRADE_MARK', '&trade;');
+    define('BLANK',      '');
 
 	/*
 		Called via the install hook.
 		Ensure this plugin is compatible with the WordPress version.
-		Set the defaul option values and store them into the database.
+		Set the default option values and store them into the database.
 	*/
 	function brand_marker_install() {
 		//check version compatibility
@@ -115,6 +115,8 @@ License: GPLv2
 	/*
 		Called via the appropriate sub-menu hook.
 		Create the settings page for the plugin
+	    Escapes the branding since it goes into a text field.
+	    No escaping is done on the trademark since it is only compared and not printed.
 	*/
 	function brand_settings_page() {
 		if ( !current_user_can(WP_USER_MANAGE_OPTS) )  {
@@ -123,15 +125,15 @@ License: GPLv2
 		// load options
 		$brand_marks_arr = get_option(BRD_MARKS);
 		// set options to variables
-		$brand_1 = $brand_marks_arr['brand_1'];
+		$brand_1 = esc_attr($brand_marks_arr['brand_1']);
 		$mark_1 = $brand_marks_arr['mark_1'];
-        $brand_2 = $brand_marks_arr['brand_2'];
+        $brand_2 = esc_attr($brand_marks_arr['brand_2']);
         $mark_2 = $brand_marks_arr['mark_2'];
-        $brand_3 = $brand_marks_arr['brand_3'];
+        $brand_3 = esc_attr($brand_marks_arr['brand_3']);
         $mark_3 = $brand_marks_arr['mark_3'];
-        $brand_4 = $brand_marks_arr['brand_4'];
+        $brand_4 = esc_attr($brand_marks_arr['brand_4']);
         $mark_4 = $brand_marks_arr['mark_4'];
-        $brand_5 = $brand_marks_arr['brand_5'];
+        $brand_5 = esc_attr($brand_marks_arr['brand_5']);
         $mark_5 = $brand_marks_arr['mark_5'];
 
 		// create form
@@ -140,35 +142,35 @@ License: GPLv2
 		echo '<div class="wrap">';
 		echo '	<form method="post" action="options.php">';
 		settings_fields(BRD_SETTINGS);
-		echo '		<input type="text" name="'.BRD_MARKS.'[brand_1]" value="'.esc_attr( $brand_1 ).'" size="24">';
+		echo '		<input type="text" name="'.BRD_MARKS.'[brand_1]" value="'.$brand_1.'" size="24">';
 		echo '		<select name="'.BRD_MARKS.'[mark_1]">';
         echo '			<option value="BLANK" '.selected($mark_1, "BLANK").'>'.BLANK.'</option>';
 		echo '			<option value="REG_MARK" '.selected($mark_1, "REG_MARK").'>'.REG_MARK.'</option>';
 		echo '			<option value="TRADE_MARK" '.selected($mark_1, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
 		echo '		</select><br>';
 
-        echo '		<input type="text" name="'.BRD_MARKS.'[brand_2]" value="'.esc_attr( $brand_2 ).'" size="24">';
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_2]" value="'.$brand_2.'" size="24">';
         echo '		<select name="'.BRD_MARKS.'[mark_2]">';
         echo '			<option value="BLANK" '.selected($mark_2, "BLANK").'>'.BLANK.'</option>';
         echo '			<option value="REG_MARK" '.selected($mark_2, "REG_MARK").'>'.REG_MARK.'</option>';
         echo '			<option value="TRADE_MARK" '.selected($mark_2, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
         echo '		</select><br>';
 
-        echo '		<input type="text" name="'.BRD_MARKS.'[brand_3]" value="'.esc_attr( $brand_3 ).'" size="24">';
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_3]" value="'.$brand_3.'" size="24">';
         echo '		<select name="'.BRD_MARKS.'[mark_3]">';
         echo '			<option value="BLANK" '.selected($mark_3, "BLANK").'>'.BLANK.'</option>';
         echo '			<option value="REG_MARK" '.selected($mark_3, "REG_MARK").'>'.REG_MARK.'</option>';
         echo '			<option value="TRADE_MARK" '.selected($mark_3, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
         echo '		</select><br>';
 
-        echo '		<input type="text" name="'.BRD_MARKS.'[brand_4]" value="'.esc_attr( $brand_4 ).'" size="24">';
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_4]" value="'.$brand_4.'" size="24">';
         echo '		<select name="'.BRD_MARKS.'[mark_4]">';
         echo '			<option value="BLANK" '.selected($mark_4, "BLANK").'>'.BLANK.'</option>';
         echo '			<option value="REG_MARK" '.selected($mark_4, "REG_MARK").'>'.REG_MARK.'</option>';
         echo '			<option value="TRADE_MARK" '.selected($mark_4, "TRADE_MARK").'>'.TRADE_MARK.'</option>';
         echo '		</select><br>';
 
-        echo '		<input type="text" name="'.BRD_MARKS.'[brand_5]" value="'.esc_attr( $brand_5 ).'" size="24">';
+        echo '		<input type="text" name="'.BRD_MARKS.'[brand_5]" value="'.$brand_5.'" size="24">';
         echo '		<select name="'.BRD_MARKS.'[mark_5]">';
         echo '			<option value="BLANK" '.selected($mark_5, "BLANK").'>'.BLANK.'</option>';
         echo '			<option value="REG_MARK" '.selected($mark_5, "REG_MARK").'>'.REG_MARK.'</option>';
@@ -191,13 +193,30 @@ License: GPLv2
 		register_setting(BRD_SETTINGS, BRD_MARKS, FNC_SANITIZE_OPTS);
 	}
 
+    /*
+     * Sanitize the options set in the options page;
+     * It copies the expected options into a second hash so as to remove any unexpected values
+     * All options at this time are text, so just sanitizes the them as text fields.
+     */
 	function brand_sanitize_options( $options ) {
-		// TODO: sanitize all the inputs
-		return $options;
+
+        $sanitized_options['brand_1'] = (!empty($options['brand_1'])) ? sanitize_text_field($options['brand_1']) : '';
+        $sanitized_options['brand_2'] = (!empty($options['brand_2'])) ? sanitize_text_field($options['brand_2']) : '';
+        $sanitized_options['brand_3'] = (!empty($options['brand_3'])) ? sanitize_text_field($options['brand_3']) : '';
+        $sanitized_options['brand_4'] = (!empty($options['brand_4'])) ? sanitize_text_field($options['brand_4']) : '';
+        $sanitized_options['brand_5'] = (!empty($options['brand_5'])) ? sanitize_text_field($options['brand_5']) : '';
+
+        $sanitized_options['mark_1'] = (!empty($options['mark_1'])) ? sanitize_text_field($options['mark_1']) : '';
+        $sanitized_options['mark_2'] = (!empty($options['mark_2'])) ? sanitize_text_field($options['mark_2']) : '';
+        $sanitized_options['mark_3'] = (!empty($options['mark_3'])) ? sanitize_text_field($options['mark_3']) : '';
+        $sanitized_options['mark_4'] = (!empty($options['mark_4'])) ? sanitize_text_field($options['mark_4']) : '';
+        $sanitized_options['mark_5'] = (!empty($options['mark_5'])) ? sanitize_text_field($options['mark_5']) : '';
+
+		return $sanitized_options;
 	}
 
 	/*
-		Search $content string for all occurances of $brand and remove $symbol if it trails it.
+		Search $content string for all occurrences of $brand and remove $symbol if it trails it.
 	*/
 	function brand_removebranding ($content, $brand, $symbol)
 	{
@@ -205,14 +224,14 @@ License: GPLv2
 	}
 
 	/*
-		Search $content for all occurances of $brand and ad $symbol after it.
+		Search $content for all occurrences of $brand and add $symbol after it.
 	*/
 	function brand_addbrand ($content, $brand, $symbol) {
 		return preg_replace('/\b('.$brand.')\b/', '${1}'.addslashes($symbol), $content);
 	}
 
 	/*
-		Parse $content, ensuring occurances of $brand have the appropriate trademark symbol afterwards
+		Parse $content, ensuring occurrences of $brand have the appropriate trademark symbol afterwards
 	*/
 	function brand_setbranding ($content, $brand, $symbol) {
 		global $REG_MARK;
@@ -229,21 +248,22 @@ License: GPLv2
 
 /*
  * Update the content with branding
+ * Escapes only the trademarks since they get printed onto the HTML.  The brand itself is not printed, so not escaped.
  */
 function brand_update_content($content) {
     $brand_marks_arr = get_option(BRD_MARKS);
 
     // set options to variables
     $brand_1 = $brand_marks_arr['brand_1'];
-    $mark_1 = $brand_marks_arr['mark_1'];
+    $mark_1 = esc_html($brand_marks_arr['mark_1']);
     $brand_2 = $brand_marks_arr['brand_2'];
-    $mark_2 = $brand_marks_arr['mark_2'];
+    $mark_2 = esc_html($brand_marks_arr['mark_2']);
     $brand_3 = $brand_marks_arr['brand_3'];
-    $mark_3 = $brand_marks_arr['mark_3'];
+    $mark_3 = esc_html($brand_marks_arr['mark_3']);
     $brand_4 = $brand_marks_arr['brand_4'];
-    $mark_4 = $brand_marks_arr['mark_4'];
+    $mark_4 = esc_html($brand_marks_arr['mark_4']);
     $brand_5 = $brand_marks_arr['brand_5'];
-    $mark_5 = $brand_marks_arr['mark_5'];
+    $mark_5 = esc_html($brand_marks_arr['mark_5']);
 
     $content = brand_setbranding($content, $brand_1, constant($mark_1));
     $content = brand_setbranding($content, $brand_2, constant($mark_2));
