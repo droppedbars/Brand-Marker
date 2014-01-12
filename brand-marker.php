@@ -2,7 +2,7 @@
 /*
 Plugin Name: Brand Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
-Description: Automatically add TM or (R) to specified text in posts.
+Description: Automatically add TM or (R) to brands contained in post content, excerpts or titles..
 Version: 0.2
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
@@ -32,6 +32,9 @@ define( "WP_PLUGIN_ADMIN_INIT", 'admin_init' );
 define( "WP_PLUGIN_PUBLISH_POST", 'publish_post' );
 define( "WP_THE_POST", 'the_post' );
 define( "WP_USER_MANAGE_OPTS", 'manage_options' );
+define( "WP_THE_CONTENT", 'the_content');
+define( "WP_THE_EXCERPT", 'the_excerpt');
+define( "WP_THE_TITLE", 'the_title');
 
 /* Function Names */
 define( "FNC_INSTALL", 'brand_marker_install' );
@@ -46,9 +49,9 @@ register_activation_hook( __FILE__, FNC_INSTALL );
 add_action( WP_PLUGIN_INIT, FNC_INIT );
 add_action( WP_PLUGIN_ADMIN_MENU, FNC_ADMIN_MENU );
 add_action( WP_PLUGIN_ADMIN_INIT, FNC_REG_SETTINGS );
-add_filter( 'the_content', 'brand_update_content' );
-add_filter( 'the_excerpt', 'brand_update_excerpt' );
-add_filter( 'the_title', 'brand_update_title' );
+add_filter( WP_THE_CONTENT, 'brand_update_content' );
+add_filter( WP_THE_EXCERPT, 'brand_update_excerpt' );
+add_filter( WP_THE_TITLE, 'brand_update_title' );
 
 /* Plugin Variables and Attributes */
 define( "PLUGIN_TAG", 'brand_marker' );
@@ -83,7 +86,12 @@ define( 'BLANK', '' );
 	Set the default option values and store them into the database.
 */
 function brand_marker_install() {
-	// TODO: check version compatibility
+	// check the install version
+	global $wp_version;
+	if ( version_compare( $wp_version, '3.8', '<' ) ) {
+		wp_die( 'This plugin requires WordPress version 3.8 or higher.' );
+	}
+
 	$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK',
 														'brand_2' => '', 'mark_2' => '',
 														'brand_3' => '', 'mark_3' => '',
@@ -102,7 +110,7 @@ function brand_marker_init() {
 
 /*
 	Called via the admin menu hook.
-	Define and create the submenu item for the plugin under options menu
+	Define and create the sub-menu item for the plugin under options menu
 */
 function brand_marker_menu() {
 	add_options_page( __( BRD_SETTINGS_PAGE_NAME, PLUGIN_TAG ),
