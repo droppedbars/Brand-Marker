@@ -61,6 +61,9 @@ define( "BRD_SETTINGS_PAGE_NAME", 'Brand Marker Settings' );
 define( "BRD_SETTINGS_NAME", 'Brand Settings' );
 define( "BRD_SETTINGS_PAGE_URL", 'brand-settings' );
 
+define( "CASE_SENSITIVE", 'case' );
+define( "ONCE_ONLY", 'once' );
+
 /* Brand marks */
 $REG_MARK   = array(
 		'&reg;',
@@ -92,11 +95,11 @@ function brand_marker_install() {
 		wp_die( 'This plugin requires WordPress version 3.8 or higher.' );
 	}
 
-	$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK', 'case_1' => true,
-														'brand_2' => '', 'mark_2' => 'BLANK', 'case_2' => false,
-														'brand_3' => '', 'mark_3' => 'BLANK', 'case_3' => false,
-														'brand_4' => '', 'mark_4' => 'BLANK', 'case_4' => false,
-														'brand_5' => '', 'mark_5' => 'BLANK', 'case_5' => false );
+	$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => 'TRADE_MARK', 'case_1' => true, 'once_1' => false,
+														'brand_2' => '', 'mark_2' => 'BLANK', 'case_2' => false, 'once_2' => false,
+														'brand_3' => '', 'mark_3' => 'BLANK', 'case_3' => false, 'once_3' => false,
+														'brand_4' => '', 'mark_4' => 'BLANK', 'case_4' => false, 'once_4' => false,
+														'brand_5' => '', 'mark_5' => 'BLANK', 'case_5' => false, 'once_5' => false );
 	// update the database with the default option values
 	update_option( BRD_MARKS, $brand_marks_arr );
 }
@@ -134,18 +137,23 @@ function brand_settings_page() {
 	$brand_1 = esc_attr( $brand_marks_arr['brand_1'] );
 	$mark_1  = $brand_marks_arr['mark_1'];
 	$case_1  = $brand_marks_arr['case_1'];
+	$once_1  = $brand_marks_arr['once_1'];
 	$brand_2 = esc_attr( $brand_marks_arr['brand_2'] );
 	$mark_2  = $brand_marks_arr['mark_2'];
 	$case_2  = $brand_marks_arr['case_2'];
+	$once_2  = $brand_marks_arr['once_2'];
 	$brand_3 = esc_attr( $brand_marks_arr['brand_3'] );
 	$mark_3  = $brand_marks_arr['mark_3'];
 	$case_3  = $brand_marks_arr['case_3'];
+	$once_3  = $brand_marks_arr['once_3'];
 	$brand_4 = esc_attr( $brand_marks_arr['brand_4'] );
 	$mark_4  = $brand_marks_arr['mark_4'];
 	$case_4  = $brand_marks_arr['case_4'];
+	$once_4  = $brand_marks_arr['once_4'];
 	$brand_5 = esc_attr( $brand_marks_arr['brand_5'] );
 	$mark_5  = $brand_marks_arr['mark_5'];
 	$case_5  = $brand_marks_arr['case_5'];
+	$once_5  = $brand_marks_arr['once_5'];
 
 	// create form
 	echo '<H1>Brand Marker</H1>';
@@ -159,7 +167,8 @@ function brand_settings_page() {
 	echo '			<option value="REG_MARK" ' . selected( $mark_1, "REG_MARK" ) . '>' . REG_MARK . '</option>';
 	echo '			<option value="TRADE_MARK" ' . selected( $mark_1, "TRADE_MARK" ) . '>' . TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_1]" value="' . $case_1 . '" ' . checked( $case_1, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_1]" value="' . CASE_SENSITIVE . '" ' . checked( $case_1, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[once_1]" value="' . ONCE_ONLY . '" ' . checked( $once_1, true, false ) . '>Apply Only Once';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRD_MARKS . '[brand_2]" value="' . $brand_2 . '" size="24">';
@@ -168,7 +177,8 @@ function brand_settings_page() {
 	echo '			<option value="REG_MARK" ' . selected( $mark_2, "REG_MARK" ) . '>' . REG_MARK . '</option>';
 	echo '			<option value="TRADE_MARK" ' . selected( $mark_2, "TRADE_MARK" ) . '>' . TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_2]" value="' . $case_2 . '"' . checked( $case_2, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_2]" value="' . CASE_SENSITIVE . '"' . checked( $case_2, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[once_2]" value="' . ONCE_ONLY . '" ' . checked( $once_2, true, false ) . '>Apply Only Once';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRD_MARKS . '[brand_3]" value="' . $brand_3 . '" size="24">';
@@ -177,7 +187,8 @@ function brand_settings_page() {
 	echo '			<option value="REG_MARK" ' . selected( $mark_3, "REG_MARK" ) . '>' . REG_MARK . '</option>';
 	echo '			<option value="TRADE_MARK" ' . selected( $mark_3, "TRADE_MARK" ) . '>' . TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_3]" value="' . $case_3 . '"' . checked( $case_3, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_3]" value="' . CASE_SENSITIVE . '"' . checked( $case_3, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[once_3]" value="' . ONCE_ONLY . '" ' . checked( $once_3, true, false ) . '>Apply Only Once';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRD_MARKS . '[brand_4]" value="' . $brand_4 . '" size="24">';
@@ -186,7 +197,8 @@ function brand_settings_page() {
 	echo '			<option value="REG_MARK" ' . selected( $mark_4, "REG_MARK" ) . '>' . REG_MARK . '</option>';
 	echo '			<option value="TRADE_MARK" ' . selected( $mark_4, "TRADE_MARK" ) . '>' . TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_4]" value="' . $case_4 . '"' . checked( $case_4, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_4]" value="' . CASE_SENSITIVE . '"' . checked( $case_4, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[once_4]" value="' . ONCE_ONLY . '" ' . checked( $once_4, true, false ) . '>Apply Only Once';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRD_MARKS . '[brand_5]" value="' . $brand_5 . '" size="24">';
@@ -195,7 +207,8 @@ function brand_settings_page() {
 	echo '			<option value="REG_MARK" ' . selected( $mark_5, "REG_MARK" ) . '>' . REG_MARK . '</option>';
 	echo '			<option value="TRADE_MARK" ' . selected( $mark_5, "TRADE_MARK" ) . '>' . TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_5]" value="' . $case_5 . '"' . checked( $case_5, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[case_5]" value="' . CASE_SENSITIVE . '"' . checked( $case_5, true, false ) . '>Case Sensitive';
+	echo '		<input type="checkbox" name="' . BRD_MARKS . '[once_5]" value="' . ONCE_ONLY . '" ' . checked( $once_5, true, false ) . '>Apply Only Once';
 	echo '		<br>';
 
 
@@ -259,6 +272,31 @@ function brand_sanitize_options( $options ) {
 		$sanitized_options['case_5'] = false;
 	}
 
+	if ( isset( $options['once_1'] ) ) {
+		$sanitized_options['once_1'] = true;
+	} else {
+		$sanitized_options['once_1'] = false;
+	}
+	if ( isset( $options['once_2'] ) ) {
+		$sanitized_options['once_2'] = true;
+	} else {
+		$sanitized_options['once_2'] = false;
+	}
+	if ( isset( $options['once_3'] ) ) {
+		$sanitized_options['once_3'] = true;
+	} else {
+		$sanitized_options['once_3'] = false;
+	}
+	if ( isset( $options['once_4'] ) ) {
+		$sanitized_options['once_4'] = true;
+	} else {
+		$sanitized_options['once_4'] = false;
+	}
+	if ( isset( $options['once_5'] ) ) {
+		$sanitized_options['once_5'] = true;
+	} else {
+		$sanitized_options['once_5'] = false;
+	}
 
 	return $sanitized_options;
 }
@@ -275,16 +313,21 @@ function brand_removebranding( $content, $brand, $symbol, $case ) {
 /*
 	Search $content for all occurrences of $brand and add $symbol after it.
 */
-function brand_addbrand( $content, $brand, $symbol, $case ) {
+function brand_addbrand( $content, $brand, $symbol, $case, $once ) {
+	// if it's case sensitive, then we need to add 'i' to the regex
 	$case ? $reg_trail = '' : $reg_trail = 'i';
 
-	return preg_replace( '/\b(' . $brand . ')\b/' . $reg_trail, '${1}' . addslashes( $symbol ), $content );
+	if ( $once ) {
+		return preg_replace( '/\b(' . $brand . ')\b/' . $reg_trail, '${1}' . addslashes( $symbol ), $content, 1 );
+	} else {
+		return preg_replace( '/\b(' . $brand . ')\b/' . $reg_trail, '${1}' . addslashes( $symbol ), $content );
+	}
 }
 
 /*
 	Parse $content, ensuring occurrences of $brand have the appropriate trademark symbol afterwards
 */
-function brand_setbranding( $content, $brand, $symbol, $case ) {
+function brand_setbranding( $content, $brand, $symbol, $case, $once ) {
 	global $REG_MARK;
 	global $TRADE_MARK;
 
@@ -298,7 +341,7 @@ function brand_setbranding( $content, $brand, $symbol, $case ) {
 			$temp_storage = brand_removebranding( $temp_storage, trim( $brand ), $value, $case );
 		}
 
-		return brand_addbrand( $temp_storage, trim( $brand ), $symbol, $case );
+		return brand_addbrand( $temp_storage, trim( $brand ), $symbol, $case, $once );
 	} else {
 		return $content;
 	}
@@ -315,24 +358,29 @@ function brand_update_content( $content ) {
 	$brand_1 = $brand_marks_arr['brand_1'];
 	$mark_1  = esc_html( $brand_marks_arr['mark_1'] );
 	$case_1  = $brand_marks_arr['case_1'];
+	$once_1  = $brand_marks_arr['once_1'];
 	$brand_2 = $brand_marks_arr['brand_2'];
 	$mark_2  = esc_html( $brand_marks_arr['mark_2'] );
 	$case_2  = $brand_marks_arr['case_2'];
+	$once_2  = $brand_marks_arr['once_2'];
 	$brand_3 = $brand_marks_arr['brand_3'];
 	$mark_3  = esc_html( $brand_marks_arr['mark_3'] );
 	$case_3  = $brand_marks_arr['case_3'];
+	$once_3  = $brand_marks_arr['once_3'];
 	$brand_4 = $brand_marks_arr['brand_4'];
 	$mark_4  = esc_html( $brand_marks_arr['mark_4'] );
 	$case_4  = $brand_marks_arr['case_4'];
+	$once_4  = $brand_marks_arr['once_4'];
 	$brand_5 = $brand_marks_arr['brand_5'];
 	$mark_5  = esc_html( $brand_marks_arr['mark_5'] );
 	$case_5  = $brand_marks_arr['case_5'];
+	$once_5  = $brand_marks_arr['once_5'];
 
-	$content = brand_setbranding( $content, $brand_1, constant( $mark_1 ), ( $case_1 ) ? TRUE : FALSE );
-	$content = brand_setbranding( $content, $brand_2, constant( $mark_2 ), ( $case_2 ) ? TRUE : FALSE );
-	$content = brand_setbranding( $content, $brand_3, constant( $mark_3 ), ( $case_3 ) ? TRUE : FALSE );
-	$content = brand_setbranding( $content, $brand_4, constant( $mark_4 ), ( $case_4 ) ? TRUE : FALSE );
-	$content = brand_setbranding( $content, $brand_5, constant( $mark_5 ), ( $case_5 ) ? TRUE : FALSE );
+	$content = brand_setbranding( $content, $brand_1, constant( $mark_1 ), $case_1, $once_1 );
+	$content = brand_setbranding( $content, $brand_2, constant( $mark_2 ), $case_2, $once_2 );
+	$content = brand_setbranding( $content, $brand_3, constant( $mark_3 ), $case_3, $once_3 );
+	$content = brand_setbranding( $content, $brand_4, constant( $mark_4 ), $case_4, $once_4 );
+	$content = brand_setbranding( $content, $brand_5, constant( $mark_5 ), $case_5, $once_5 );
 
 	return $content;
 }
@@ -348,24 +396,29 @@ function brand_update_excerpt( $excerpt ) {
 	$brand_1 = $brand_marks_arr['brand_1'];
 	$mark_1  = esc_html( $brand_marks_arr['mark_1'] );
 	$case_1  = $brand_marks_arr['case_1'];
+	$once_1  = $brand_marks_arr['once_1'];
 	$brand_2 = $brand_marks_arr['brand_2'];
 	$mark_2  = esc_html( $brand_marks_arr['mark_2'] );
 	$case_2  = $brand_marks_arr['case_2'];
+	$once_2  = $brand_marks_arr['once_2'];
 	$brand_3 = $brand_marks_arr['brand_3'];
 	$mark_3  = esc_html( $brand_marks_arr['mark_3'] );
 	$case_3  = $brand_marks_arr['case_3'];
+	$once_3  = $brand_marks_arr['once_3'];
 	$brand_4 = $brand_marks_arr['brand_4'];
 	$mark_4  = esc_html( $brand_marks_arr['mark_4'] );
 	$case_4  = $brand_marks_arr['case_4'];
+	$once_4  = $brand_marks_arr['once_4'];
 	$brand_5 = $brand_marks_arr['brand_5'];
 	$mark_5  = esc_html( $brand_marks_arr['mark_5'] );
 	$case_5  = $brand_marks_arr['case_5'];
+	$once_5  = $brand_marks_arr['once_5'];
 
-	$excerpt = brand_setbranding( $excerpt, $brand_1, constant( $mark_1 ), ( $case_1 ) ? TRUE : FALSE );
-	$excerpt = brand_setbranding( $excerpt, $brand_2, constant( $mark_2 ), ( $case_2 ) ? TRUE : FALSE );
-	$excerpt = brand_setbranding( $excerpt, $brand_3, constant( $mark_3 ), ( $case_3 ) ? TRUE : FALSE );
-	$excerpt = brand_setbranding( $excerpt, $brand_4, constant( $mark_4 ), ( $case_4 ) ? TRUE : FALSE );
-	$excerpt = brand_setbranding( $excerpt, $brand_5, constant( $mark_5 ), ( $case_5 ) ? TRUE : FALSE );
+	$excerpt = brand_setbranding( $excerpt, $brand_1, constant( $mark_1 ), $case_1, $once_1 );
+	$excerpt = brand_setbranding( $excerpt, $brand_2, constant( $mark_2 ), $case_2, $once_2 );
+	$excerpt = brand_setbranding( $excerpt, $brand_3, constant( $mark_3 ), $case_3, $once_3 );
+	$excerpt = brand_setbranding( $excerpt, $brand_4, constant( $mark_4 ), $case_4, $once_4 );
+	$excerpt = brand_setbranding( $excerpt, $brand_5, constant( $mark_5 ), $case_5, $once_5 );
 
 	return $excerpt;
 }
@@ -381,24 +434,29 @@ function brand_update_title( $title ) {
 	$brand_1 = $brand_marks_arr['brand_1'];
 	$mark_1  = esc_html( $brand_marks_arr['mark_1'] );
 	$case_1  = $brand_marks_arr['case_1'];
+	$once_1  = $brand_marks_arr['once_1'];
 	$brand_2 = $brand_marks_arr['brand_2'];
 	$mark_2  = esc_html( $brand_marks_arr['mark_2'] );
 	$case_2  = $brand_marks_arr['case_2'];
+	$once_2  = $brand_marks_arr['once_2'];
 	$brand_3 = $brand_marks_arr['brand_3'];
 	$mark_3  = esc_html( $brand_marks_arr['mark_3'] );
 	$case_3  = $brand_marks_arr['case_3'];
+	$once_3  = $brand_marks_arr['once_3'];
 	$brand_4 = $brand_marks_arr['brand_4'];
 	$mark_4  = esc_html( $brand_marks_arr['mark_4'] );
 	$case_4  = $brand_marks_arr['case_4'];
+	$once_4  = $brand_marks_arr['once_4'];
 	$brand_5 = $brand_marks_arr['brand_5'];
 	$mark_5  = esc_html( $brand_marks_arr['mark_5'] );
 	$case_5  = $brand_marks_arr['case_5'];
+	$once_5  = $brand_marks_arr['once_5'];
 
-	$title = brand_setbranding( $title, $brand_1, constant( $mark_1 ), ( $case_1 ) ? TRUE : FALSE );
-	$title = brand_setbranding( $title, $brand_2, constant( $mark_2 ), ( $case_2 ) ? TRUE : FALSE );
-	$title = brand_setbranding( $title, $brand_3, constant( $mark_3 ), ( $case_3 ) ? TRUE : FALSE );
-	$title = brand_setbranding( $title, $brand_4, constant( $mark_4 ), ( $case_4 ) ? TRUE : FALSE );
-	$title = brand_setbranding( $title, $brand_5, constant( $mark_5 ), ( $case_5 ) ? TRUE : FALSE );
+	$title = brand_setbranding( $title, $brand_1, constant( $mark_1 ), $case_1, $once_1 );
+	$title = brand_setbranding( $title, $brand_2, constant( $mark_2 ), $case_2, $once_2 );
+	$title = brand_setbranding( $title, $brand_3, constant( $mark_3 ), $case_3, $once_3 );
+	$title = brand_setbranding( $title, $brand_4, constant( $mark_4 ), $case_4, $once_4 );
+	$title = brand_setbranding( $title, $brand_5, constant( $mark_5 ), $case_5, $once_5 );
 
 	return $title;
 }

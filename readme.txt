@@ -5,6 +5,8 @@ Tags: trademark, symbol, registered, branding, brand, mark
 Requires at least: 3.8
 Tested up to: 3.8
 Stable tag: 1.0
+Author URI: http://patrick.mauro.ca
+Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
