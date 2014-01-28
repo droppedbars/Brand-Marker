@@ -4,7 +4,7 @@ Donate link:
 Tags: trademark, symbol, registered, branding, brand, mark
 Requires at least: 3.8
 Tested up to: 3.8
-Stable tag: 1.0
+Stable tag: 0.5
 Author URI: http://patrick.mauro.ca
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
