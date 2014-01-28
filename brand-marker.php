@@ -2,7 +2,7 @@
 /*
 Plugin Name: Brand Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
-Description: Automatically add TM or (R) to brands contained in post content, excerpts or titles..
+Description: Never forget to mark your brand or trademarks again. Automatically add TM or (R) to trademarks in post title, excerpt and content. Activate, and open 'Settings->Brand Marker'.  Enter in the brands you wish to have marked and check off case sensitivity and frequency of marking.
 Version: 0.3
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
@@ -63,8 +63,8 @@ add_filter( BRMRK_WP_THE_TITLE, BRMRK_FNC_UPDATE_TITLE );
 define( "BRMRK_PLUGIN_TAG", 'brand_marker' );
 define( "BRMRK_MARKS", 'brmrk_options' );
 define( "BRMRK_SETTINGS", 'brmrk-settings-group' );
-define( "BRMRK_SETTINGS_PAGE_NAME", 'Brand Marker Settings' );
-define( "BRMRK_SETTINGS_NAME", 'Brand Marker Settings' );
+define( "BRMRK_SETTINGS_PAGE_NAME", 'Brand Marker' );
+define( "BRMRK_SETTINGS_NAME", 'Brand Marker' );
 define( "BRMRK_SETTINGS_PAGE_URL", 'brand-settings' );
 
 define( "BRMRK_CASE_SENSITIVE", 'case' );
@@ -162,8 +162,13 @@ function brmrk_page() {
 	$once_5  = $brand_marks_arr['once_5'];
 
 	// create form
-	echo '<H1>Brand Marker</H1>';
-	echo '<H3>List the brand names that you want ' . BRMRK_REG_MARK . ' or ' . BRMRK_TRADE_MARK . ' to appear after.';
+	echo '<h1>Brand Marker</h1>';
+	echo '<h3>List the brand names that you want ' . BRMRK_REG_MARK . ' or ' . BRMRK_TRADE_MARK . ' to appear after.</h3>';
+	echo '<ul><li>The marking of brands will occur in the order as they are listed here.<br>';
+	echo '<li>Any existing trademark symbol on the specified brands will be removed prior to the application of what is selected here.<br>';
+	echo '<li>If left <em>Case Sensitive</em> is left unchecked then the mark will be applied regardless of the case.<br>';
+	echo '<li>If <em>Apply Only Once</em> is checked, the brand will be marked only the first time it is found.  This applies separately to each title, excerpt and content.<br>';
+	echo '</ul>';
 	echo '<div class="wrap">';
 	echo '	<form method="post" action="options.php">';
 	settings_fields( BRMRK_SETTINGS );
@@ -173,8 +178,8 @@ function brmrk_page() {
 	echo '			<option value="BRMRK_REG_MARK" ' . selected( $mark_1, "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
 	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $mark_1, "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[case_1]" value="' . BRMRK_CASE_SENSITIVE . '" ' . checked( $case_1, true, false ) . '>Case Sensitive';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[once_1]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_1, true, false ) . '>Apply Only Once';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_1]" value="' . BRMRK_CASE_SENSITIVE . '" ' . checked( $case_1, true, false ) . '>Case Sensitive</label>';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_1]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_1, true, false ) . '>Apply Only Once</label>';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_2]" value="' . $brand_2 . '" size="24">';
@@ -183,8 +188,8 @@ function brmrk_page() {
 	echo '			<option value="BRMRK_REG_MARK" ' . selected( $mark_2, "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
 	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $mark_2, "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[case_2]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_2, true, false ) . '>Case Sensitive';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[once_2]" value="' .BRMRK_ONCE_ONLY . '" ' . checked( $once_2, true, false ) . '>Apply Only Once';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_2]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_2, true, false ) . '>Case Sensitive</label>';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_2]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_2, true, false ) . '>Apply Only Once</label>';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_3]" value="' . $brand_3 . '" size="24">';
@@ -193,8 +198,8 @@ function brmrk_page() {
 	echo '			<option value="BRMRK_REG_MARK" ' . selected( $mark_3, "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
 	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $mark_3, "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[case_3]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_3, true, false ) . '>Case Sensitive';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[once_3]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_3, true, false ) . '>Apply Only Once';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_3]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_3, true, false ) . '>Case Sensitive</label>';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_3]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_3, true, false ) . '>Apply Only Once</label>';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_4]" value="' . $brand_4 . '" size="24">';
@@ -203,8 +208,8 @@ function brmrk_page() {
 	echo '			<option value="BRMRK_REG_MARK" ' . selected( $mark_4, "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
 	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $mark_4, "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[case_4]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_4, true, false ) . '>Case Sensitive';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[once_4]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_4, true, false ) . '>Apply Only Once';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_4]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_4, true, false ) . '>Case Sensitive</label>';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_4]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_4, true, false ) . '>Apply Only Once</label>';
 	echo '		<br>';
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_5]" value="' . $brand_5 . '" size="24">';
@@ -213,8 +218,8 @@ function brmrk_page() {
 	echo '			<option value="BRMRK_REG_MARK" ' . selected( $mark_5, "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
 	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $mark_5, "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
 	echo '		</select>';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[case_5]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_5, true, false ) . '>Case Sensitive';
-	echo '		<input type="checkbox" name="' . BRMRK_MARKS . '[once_5]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_5, true, false ) . '>Apply Only Once';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_5]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $case_5, true, false ) . '>Case Sensitive</label>';
+	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_5]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $once_5, true, false ) . '>Apply Only Once</label>';
 	echo '		<br>';
 
 

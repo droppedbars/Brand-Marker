@@ -10,19 +10,13 @@ Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Ever forget to consistently apply trademark symbols to your trademarked phrases or brands?  Brand-Marker allows you
-to list out your brands, select the appropriate trademark symbol and rest assured that they will be applied in every
-page, or post that you publish.  No more mistaken or forgotten trademark symbols.
+Ever forget to consistently apply trademark symbols to your trademarked phrases or brands?  Brand-Marker allows you to list out your brands, select the appropriate trademark symbol and rest assured that they will be applied in every page, or post that you publish.  No more mistaken or forgotten trademark symbols.
 
 == Description ==
 
-Ever forget to consistently apply trademark symbols to your trademarked phrases or brands?  Brand-Marker allows you
-to list out your brands, select the appropriate trademark symbol and rest assured that they will be applied in every
-page, or post that you publish.  No more mistaken or forgotten trademark symbols.
+Ever forget to consistently apply trademark symbols to your trademarked phrases or brands?  Brand-Marker allows you to list out your brands, select the appropriate trademark symbol and rest assured that they will be applied in every page, or post that you publish.  No more mistaken or forgotten trademark symbols.
 
-Brand-Marker will parse your posts on the fly and ensure that the appropriate trademark symbol follows them.  This
-will apply to the title, content and excerpt of the post.  With support for up to five brands, being case insensitive,
-and both trademark symbols, you and your bloggers will not need to worry about trademark symbols on your brands again!
+Brand-Marker will parse your posts on the fly and ensure that the appropriate trademark symbol follows them.  This will apply to the title, content and excerpt of the post.  With support for up to five brands, being case insensitive, and both trademark symbols, you and your bloggers will not need to worry about trademark symbols on your brands again!
 
 == Features ==
 
@@ -36,8 +30,8 @@ and both trademark symbols, you and your bloggers will not need to worry about t
 
 1. Click 'Plugins > Add New'
 1. Search for 'Brand-Marker'
-1. Activate Brand-Mark from your Plugins page
-1. Click 'Settings > Brand Settings'
+1. Activate Brand Marker from your Plugins page
+1. Click 'Settings > Brand Marker'
 1. Enter in your brands that require trademark symbols, select the trademark symbol and click 'Save Changes'
 
 = Through WordPress.org =
@@ -45,15 +39,18 @@ and both trademark symbols, you and your bloggers will not need to worry about t
 1. Download Brand-Marker
 1. Upload or copy the 'Brand-Marker' directory to your '/wp-content/plugins/' directory using your preferred method
 1. Activate Brand-Mark from your Plugins page
-1. Click 'Settings > Brand Settings'
+1. Click 'Settings > Brand Marker'
 1. Enter in your brands that require trademark symbols, select the trademark symbol and click 'Save Changes'
 
 == Frequently Asked Questions ==
 
-= How do I handle overlapping brands like "Brand X" and "Brand X Y" =
+= How do I handle overlapping brands like "Brand X" and "Brand X Y"? =
 
-To ensure you don't wind up with two trademarks in there, add "Brand X" as the first brand in the settings page and
-put "Brand X Y" afterwards.
+To ensure you don't wind up with two trademark symbols, add "Brand X" as the first brand in the settings page and put "Brand X Y" afterwards.
+
+= What happens if a user already put in a trademark symbol? =
+
+That's okay.  Brand Marker will remove any existing trademark symbols from brands that you specify prior to applying the appropriate trademark symbol.
 
 == Screenshots ==
 
@@ -66,35 +63,19 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
-= 1.0 =
+= 0.5 =
 * First release. Support for five brands.
 
 == Upgrade Notice ==
 
 None
 
-== A brief Markdown Example ==
-TODO: Remove section
+== Roadmap ==
 
-Ordered list:
+Some items planned for in the future:
 
-1. Some feature
-1. Another feature
-1. Something else about the plugin
+* dynamic number of brands
+* replace brands with images, spans or divs
+* dynamic shortcodes for brands
 
-Unordered list:
-
-* something
-* something else
-* third thing
-
-Here's a link to [WordPress](http://wordpress.org/ "Your favorite software") and one to [Markdown's Syntax Documentation][markdown syntax].
-Titles are optional, naturally.
-
-[markdown syntax]: http://daringfireball.net/projects/markdown/syntax
-            "Markdown is what the parser uses to process much of the readme file"
-
-Markdown uses email style notation for blockquotes and I've been told:
-> Asterisks for *emphasis*. Double it up  for **strong**.
-
-`<?php code(); // goes in backticks ?>`
+If you have requests, then mosey on over to http://github.com/droppedbars/Brand-Marker and let me know.
