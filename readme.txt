@@ -58,8 +58,8 @@ That's okay.  Brand Marker will remove any existing trademark symbols from brand
 
 == Changelog ==
 
-= 0.5 =
-* First release. Support for five brands.
+= 0.3.1 =
+* Initial release. Support for five brands.
 
 == Upgrade Notice ==
 
