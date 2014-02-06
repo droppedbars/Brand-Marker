@@ -54,12 +54,7 @@ That's okay.  Brand Marker will remove any existing trademark symbols from brand
 
 == Screenshots ==
 
-TODO:
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets 
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png` 
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Configuration settings for Brand Marker, found under the "settings" menu.
 
 == Changelog ==
 
@@ -77,5 +72,6 @@ Some items planned for in the future:
 * dynamic number of brands
 * replace brands with images, spans or divs
 * dynamic shortcodes for brands
+* support for multi-site setups
 
 If you have requests, then mosey on over to http://github.com/droppedbars/Brand-Marker and let me know.
