@@ -3,8 +3,8 @@ Contributors: droppedbars
 Donate link:
 Tags: trademark, symbol, registered, branding, brand, mark
 Requires at least: 3.8
-Tested up to: 3.8
-Stable tag: 0.5
+Tested up to: 3.8.1
+Stable tag: 0.3.2
 Author URI: http://patrick.mauro.ca
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
@@ -58,7 +58,7 @@ That's okay.  Brand Marker will remove any existing trademark symbols from brand
 
 == Changelog ==
 
-= 0.3.1 =
+= 0.3.2 =
 * Initial release. Support for five brands.
 
 == Upgrade Notice ==

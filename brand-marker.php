@@ -3,13 +3,13 @@
 Plugin Name: Brand Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 Description: Never forget to mark your brand or trademarks again. Automatically add TM or (R) to trademarks in post title, excerpt and content. Activate, and open 'Settings->Brand Marker'.  Enter in the brands you wish to have marked and check off case sensitivity and frequency of marking.
-Version: 0.3.1
+Version: 0.3.2
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
 */
 
-/*	Copyright 2013 Patrick Mauro (email : patrick@mauro.ca)
+/*	Copyright 2014 Patrick Mauro (email : patrick@mauro.ca)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ License: GPLv2
 	Foundation, Inc., 51 Franklin St., Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-require_once(dirname(__FILE__).'/shared-globals.php');
+require_once( dirname( __FILE__ ) . '/shared-globals.php' );
 
 // function and global prefix: brmrk / BRMRK
 
@@ -84,13 +84,12 @@ function brmrk_install() {
 		wp_die( 'This plugin requires WordPress version 3.8 or higher.' );
 	}
 
-	$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => 'BRMRK_TRADE_MARK', 'case_1' => true, 'once_1' => false,
-														'brand_2' => '', 'mark_2' => 'BRMRK_BLANK', 'case_2' => false, 'once_2' => false,
-														'brand_3' => '', 'mark_3' => 'BRMRK_BLANK', 'case_3' => false, 'once_3' => false,
-														'brand_4' => '', 'mark_4' => 'BRMRK_BLANK', 'case_4' => false, 'once_4' => false,
-														'brand_5' => '', 'mark_5' => 'BRMRK_BLANK', 'case_5' => false, 'once_5' => false );
-	// update the database with the default option values
-	update_option( BRMRK_MARKS, $brand_marks_arr );
+
+	if ( ! get_option( BRMRK_MARKS ) ) {
+		$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => 'BRMRK_TRADE_MARK', 'case_1' => true, 'once_1' => false, 'brand_2' => '', 'mark_2' => 'BRMRK_BLANK', 'case_2' => false, 'once_2' => false, 'brand_3' => '', 'mark_3' => 'BRMRK_BLANK', 'case_3' => false, 'once_3' => false, 'brand_4' => '', 'mark_4' => 'BRMRK_BLANK', 'case_4' => false, 'once_4' => false, 'brand_5' => '', 'mark_5' => 'BRMRK_BLANK', 'case_5' => false, 'once_5' => false );
+		// update the database with the default option values
+		update_option( BRMRK_MARKS, $brand_marks_arr );
+	}
 }
 
 /*
