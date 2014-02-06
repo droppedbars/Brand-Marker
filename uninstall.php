@@ -5,7 +5,8 @@
  * Date: 14-01-11
  * Time: 7:46 AM
  */
-define( "BRMRK_MARKS", 'brmrk_options' ); // duplicate of brand-marker.php, TODO: define it only once
+
+require_once(dirname(__FILE__).'/shared-globals.php');
 
 // if uninstall/delete is not called from WordPress, then exit
 if ( ! defined( 'ABSPATH' ) && ! defined( ! 'WP_UNINSTALL_PLUGIN' ) ) {

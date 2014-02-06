@@ -3,7 +3,7 @@
 Plugin Name: Brand Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 Description: Never forget to mark your brand or trademarks again. Automatically add TM or (R) to trademarks in post title, excerpt and content. Activate, and open 'Settings->Brand Marker'.  Enter in the brands you wish to have marked and check off case sensitivity and frequency of marking.
-Version: 0.3
+Version: 0.3.1
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
@@ -26,18 +26,9 @@ License: GPLv2
 	Foundation, Inc., 51 Franklin St., Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-// function and global prefix: brmrk / BRMRK
+require_once(dirname(__FILE__).'/shared-globals.php');
 
-/* WordPress Hooks */
-define( "BRMRK_WP_PLUGIN_INIT", 'init' );
-define( "BRMRK_WP_PLUGIN_ADMIN_MENU", 'admin_menu' );
-define( "BRMRK_WP_PLUGIN_ADMIN_INIT", 'admin_init' );
-define( "BRMRK_WP_PLUGIN_PUBLISH_POST", 'publish_post' );
-define( "BRMRK_WP_THE_POST", 'the_post' );
-define( "BRMRK_WP_USER_MANAGE_OPTS", 'manage_options' );
-define( "BRMRK_WP_THE_CONTENT", 'the_content' );
-define( "BRMRK_WP_THE_EXCERPT", 'the_excerpt' );
-define( "BRMRK_WP_THE_TITLE", 'the_title' );
+// function and global prefix: brmrk / BRMRK
 
 /* Function Names */
 define( "BRMRK_FNC_INSTALL", 'brmrk_install' );
@@ -58,14 +49,6 @@ add_action( BRMRK_WP_PLUGIN_ADMIN_INIT, BRMRK_FNC_REG_SETTINGS );
 add_filter( BRMRK_WP_THE_CONTENT, BRMRK_FNC_UPDATE_CONTENT );
 add_filter( BRMRK_WP_THE_EXCERPT, BRMRK_FNC_UPDATE_EXCERPT );
 add_filter( BRMRK_WP_THE_TITLE, BRMRK_FNC_UPDATE_TITLE );
-
-/* Plugin Variables and Attributes */
-define( "BRMRK_PLUGIN_TAG", 'brand_marker' );
-define( "BRMRK_MARKS", 'brmrk_options' );
-define( "BRMRK_SETTINGS", 'brmrk-settings-group' );
-define( "BRMRK_SETTINGS_PAGE_NAME", 'Brand Marker' );
-define( "BRMRK_SETTINGS_NAME", 'Brand Marker' );
-define( "BRMRK_SETTINGS_PAGE_URL", 'brand-settings' );
 
 define( "BRMRK_CASE_SENSITIVE", 'case' );
 define( "BRMRK_ONCE_ONLY", 'once' );
