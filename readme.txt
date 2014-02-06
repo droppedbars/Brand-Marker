@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== Brand-Marker ===
 Contributors: droppedbars
 Donate link:
 Tags: trademark, symbol, registered, branding, brand, mark
@@ -10,7 +10,7 @@ Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Ever forget to consistently apply trademark symbols to your trademarked phrases or brands?  Brand-Marker allows you to list out your brands, select the appropriate trademark symbol and rest assured that they will be applied in every page, or post that you publish.  No more mistaken or forgotten trademark symbols.
+Brand-Marker allows ensures that the appropriate trademark symbol will be applied in every page, or post that you publish.
 
 == Description ==
 
