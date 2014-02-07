@@ -10,7 +10,7 @@ Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Brand-Marker allows ensures that the appropriate trademark symbol will be applied in every page, or post that you publish.
+Brand-Marker ensures that the appropriate trademark symbol will be applied in every page, or post that you publish.
 
 == Description ==
 
