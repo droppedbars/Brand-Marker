@@ -14,9 +14,9 @@ class brmrk_BrandModel {
 	private $_case_sensitive = false;
 	private $_apply_only_once = false;
 
-	public function __construct($brand, $mark, $case_sensitive, $apply_only_once) {
-		$this->set_brand($brand);
-		$this->set_mark($mark);
+	public function __construct( $brand, $mark, $case_sensitive, $apply_only_once ) {
+		$this->set_brand( $brand );
+		$this->set_mark( $mark );
 		$case_sensitive ? $this->set_case_sensitive() : $this->set_case_insensitive();
 		$apply_only_once ? $this->set_apply_only_once() : $this->set_apply_more_than_once();
 	}
@@ -32,22 +32,22 @@ class brmrk_BrandModel {
 	 * Returns the brand value sanitized for HTML use
 	 */
 	public function get_brand_html() {
-		return esc_html($this->_brand);
+		return esc_html( $this->_brand );
 	}
 
 	/*
 	 * Sets the brand value to the object.  Ensures it has been trimmed of leading and trailing
 	 * whitespace and uses sanitize_text_field on it.
 	 */
-	public function set_brand($newBrand) {
-		$this->_brand = sanitize_text_field(trim($newBrand));
+	public function set_brand( $newBrand ) {
+		$this->_brand = sanitize_text_field( trim( $newBrand ) );
 	}
 
 	public function get_mark() {
 		return $this->_mark;
 	}
 
-	public function set_mark($new_mark) {
+	public function set_mark( $new_mark ) {
 		$this->_mark = $new_mark;
 	}
 
