@@ -6,6 +6,8 @@
  * Time: 11:34 PM
  */
 
+require_once( dirname( __FILE__ ) . '/../brmrk_MarkTags.php' );
+
 class brmrk_BrandModel {
 	private $_brand = '';
 	private $_mark = '';
@@ -19,13 +21,26 @@ class brmrk_BrandModel {
 		$apply_only_once ? $this->set_apply_only_once() : $this->set_apply_more_than_once();
 	}
 
+	/*
+	 * Returns the raw brand value without any sanitization
+	 */
 	public function get_brand() {
 		return $this->_brand;
 	}
 
+	/*
+	 * Returns the brand value sanitized for HTML use
+	 */
+	public function get_brand_html() {
+		return esc_html($this->_brand);
+	}
+
+	/*
+	 * Sets the brand value to the object.  Ensures it has been trimmed of leading and trailing
+	 * whitespace and uses sanitize_text_field on it.
+	 */
 	public function set_brand($newBrand) {
-		//TODO: sanitize input
-		$this->_brand = $newBrand;
+		$this->_brand = sanitize_text_field(trim($newBrand));
 	}
 
 	public function get_mark() {
@@ -33,7 +48,6 @@ class brmrk_BrandModel {
 	}
 
 	public function set_mark($new_mark) {
-		//TODO: create enum structure for trademark options
 		$this->_mark = $new_mark;
 	}
 

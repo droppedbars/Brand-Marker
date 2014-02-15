@@ -3,7 +3,7 @@
 Plugin Name: Brand Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 Description: Never forget to mark your brand or trademarks again. Automatically add TM or (R) to trademarks in post title, excerpt and content. Activate, and open 'Settings->Brand Marker'.  Enter in the brands you wish to have marked and check off case sensitivity and frequency of marking.
-Version: 0.4.0
+Version: 0.4.1
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
@@ -28,6 +28,7 @@ License: GPLv2
 
 require_once( dirname( __FILE__ ) . '/shared-globals.php' );
 require_once( dirname( __FILE__ ) . '/models/brmrk_BrandModel.php');
+require_once( dirname( __FILE__ ) . '/brmrk_MarkTags.php' );
 
 // function and global prefix: brmrk / BRMRK
 
@@ -54,25 +55,6 @@ add_filter( BRMRK_WP_THE_TITLE, BRMRK_FNC_UPDATE_TITLE );
 define( "BRMRK_CASE_SENSITIVE", 'case' );
 define( "BRMRK_ONCE_ONLY", 'once' );
 
-/* Brand marks */
-$BRMRK_REG_MARK   = array(
-		'&reg;',
-		'&reg',
-		'®',
-		'&#174;',
-		'&#174'
-);
-$BRMRK_TRADE_MARK = array(
-		'&trade;',
-		'&trade',
-		'™',
-		'&#8482;',
-		'&#8482'
-);
-define( 'BRMRK_REG_MARK', '&reg;' );
-define( 'BRMRK_TRADE_MARK', '&trade;' );
-define( 'BRMRK_BLANK', '' );
-
 /*
 	Called via the install hook.
 	Ensure this plugin is compatible with the WordPress version.
@@ -87,7 +69,7 @@ function brmrk_install() {
 
 
 	if ( ! get_option( BRMRK_MARKS ) ) {
-		$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => 'BRMRK_TRADE_MARK', 'case_1' => true, 'once_1' => false, 'brand_2' => '', 'mark_2' => 'BRMRK_BLANK', 'case_2' => false, 'once_2' => false, 'brand_3' => '', 'mark_3' => 'BRMRK_BLANK', 'case_3' => false, 'once_3' => false, 'brand_4' => '', 'mark_4' => 'BRMRK_BLANK', 'case_4' => false, 'once_4' => false, 'brand_5' => '', 'mark_5' => 'BRMRK_BLANK', 'case_5' => false, 'once_5' => false );
+		$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => brmrk_MarkTags::TRADEMARK_TAG, 'case_1' => true, 'once_1' => false, 'brand_2' => '', 'mark_2' => brmrk_MarkTags::BLANK_TAG, 'case_2' => false, 'once_2' => false, 'brand_3' => '', 'mark_3' => brmrk_MarkTags::BLANK_TAG, 'case_3' => false, 'once_3' => false, 'brand_4' => '', 'mark_4' => brmrk_MarkTags::BLANK_TAG, 'case_4' => false, 'once_4' => false, 'brand_5' => '', 'mark_5' => brmrk_MarkTags::BLANK_TAG, 'case_5' => false, 'once_5' => false );
 		// update the database with the default option values
 		update_option( BRMRK_MARKS, $brand_marks_arr );
 	}
@@ -123,15 +105,15 @@ function brmrk_page() {
 	// load options
 	$brand_marks_arr = get_option( BRMRK_MARKS );
 	// set options to variables
-	$brand_1 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_1'] ), $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
-	$brand_2 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_2'] ), $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
-	$brand_3 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_3'] ), $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
-	$brand_4 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_4'] ), $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
-	$brand_5 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_5'] ), $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
+	$brand_1 = new brmrk_BrandModel( $brand_marks_arr['brand_1'] , $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
+	$brand_2 = new brmrk_BrandModel($brand_marks_arr['brand_2'] , $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
+	$brand_3 = new brmrk_BrandModel( $brand_marks_arr['brand_3'] , $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
+	$brand_4 = new brmrk_BrandModel( $brand_marks_arr['brand_4'] , $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
+	$brand_5 = new brmrk_BrandModel( $brand_marks_arr['brand_5'] , $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
 
 	// create form
 	echo '<h1>Brand Marker</h1>';
-	echo '<h3>List the brand names that you want ' . BRMRK_REG_MARK . ' or ' . BRMRK_TRADE_MARK . ' to appear after.</h3>';
+	echo '<h3>List the brand names that you want ' . brmrk_MarkTags::REGISTERED . ' or ' . brmrk_MarkTags::TRADE_MARK . ' to appear after.</h3>';
 	echo '<ul><li>The marking of brands will occur in the order as they are listed here.<br>';
 	echo '<li>Any existing trademark symbol on the specified brands will be removed prior to the application of what is selected here.<br>';
 	echo '<li>If left <em>Case Sensitive</em> is left unchecked then the mark will be applied regardless of the case.<br>';
@@ -142,9 +124,9 @@ function brmrk_page() {
 	settings_fields( BRMRK_SETTINGS );
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_1]" value="' . $brand_1->get_brand() . '" size="24">';
 	echo '		<select name="' . BRMRK_MARKS . '[mark_1]">';
-	echo '			<option value="BRMRK_BLANK" ' . selected( $brand_1->get_mark(), "BRMRK_BLANK" ) . '>' . BRMRK_BLANK . '</option>';
-	echo '			<option value="BRMRK_REG_MARK" ' . selected( $brand_1->get_mark(), "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
-	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $brand_1->get_mark(), "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
+	echo '			<option value="brmrk_MarkTags::BLANK" ' . selected( $brand_1->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
+	echo '			<option value="brmrk_MarkTags::REGISTERED" ' . selected( $brand_1->get_mark(), brmrk_MarkTags::REGISTERED_TAG ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
+	echo '			<option value="brmrk_MarkTags::TRADE_MARK" ' . selected( $brand_1->get_mark(), brmrk_MarkTags::TRADEMARK_TAG ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
 	echo '		</select>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_1]" value="' . BRMRK_CASE_SENSITIVE . '" ' . checked( $brand_1->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_1]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand_1->apply_only_once(), true, false ) . '>Apply Only Once</label>';
@@ -152,9 +134,9 @@ function brmrk_page() {
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_2]" value="' . $brand_2->get_brand() . '" size="24">';
 	echo '		<select name="' . BRMRK_MARKS . '[mark_2]">';
-	echo '			<option value="BRMRK_BLANK" ' . selected( $brand_2->get_mark(), "BRMRK_BLANK" ) . '>' . BRMRK_BLANK . '</option>';
-	echo '			<option value="BRMRK_REG_MARK" ' . selected( $brand_2->get_mark(), "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
-	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $brand_2->get_mark(), "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
+	echo '			<option value="brmrk_MarkTags::BLANK" ' . selected( $brand_2->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
+	echo '			<option value="brmrk_MarkTags::REGISTERED" ' . selected( $brand_2->get_mark(), brmrk_MarkTags::REGISTERED_TAG ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
+	echo '			<option value="brmrk_MarkTags::TRADE_MARK" ' . selected( $brand_2->get_mark(), brmrk_MarkTags::TRADEMARK_TAG ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
 	echo '		</select>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_2]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $brand_2->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_2]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand_2->apply_only_once(), true, false ) . '>Apply Only Once</label>';
@@ -162,9 +144,9 @@ function brmrk_page() {
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_3]" value="' . $brand_3->get_brand() . '" size="24">';
 	echo '		<select name="' . BRMRK_MARKS . '[mark_3]">';
-	echo '			<option value="BRMRK_BLANK" ' . selected( $brand_3->get_mark(), "BRMRK_BLANK" ) . '>' . BRMRK_BLANK . '</option>';
-	echo '			<option value="BRMRK_REG_MARK" ' . selected( $brand_3->get_mark(), "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
-	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $brand_3->get_mark(), "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
+	echo '			<option value="brmrk_MarkTags::BLANK" ' . selected( $brand_3->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
+	echo '			<option value="brmrk_MarkTags::REGISTERED" ' . selected( $brand_3->get_mark(), brmrk_MarkTags::REGISTERED_TAG ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
+	echo '			<option value="brmrk_MarkTags::TRADE_MARK" ' . selected( $brand_3->get_mark(), brmrk_MarkTags::TRADEMARK_TAG ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
 	echo '		</select>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_3]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $brand_3->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_3]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand_3->apply_only_once(), true, false ) . '>Apply Only Once</label>';
@@ -172,9 +154,9 @@ function brmrk_page() {
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_4]" value="' . $brand_4->get_brand() . '" size="24">';
 	echo '		<select name="' . BRMRK_MARKS . '[mark_4]">';
-	echo '			<option value="BRMRK_BLANK" ' . selected( $brand_4->get_mark(), "BRMRK_BLANK" ) . '>' . BRMRK_BLANK . '</option>';
-	echo '			<option value="BRMRK_REG_MARK" ' . selected( $brand_4->get_mark(), "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
-	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $brand_4->get_mark(), "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
+	echo '			<option value="brmrk_MarkTags::BLANK" ' . selected( $brand_4->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
+	echo '			<option value="brmrk_MarkTags::REGISTERED" ' . selected( $brand_4->get_mark(), brmrk_MarkTags::REGISTERED_TAG ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
+	echo '			<option value="brmrk_MarkTags::TRADE_MARK" ' . selected( $brand_4->get_mark(), brmrk_MarkTags::TRADEMARK_TAG ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
 	echo '		</select>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_4]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $brand_4->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_4]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand_4->apply_only_once(), true, false ) . '>Apply Only Once</label>';
@@ -182,9 +164,9 @@ function brmrk_page() {
 
 	echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_5]" value="' . $brand_5->get_brand() . '" size="24">';
 	echo '		<select name="' . BRMRK_MARKS . '[mark_5]">';
-	echo '			<option value="BRMRK_BLANK" ' . selected( $brand_5->get_mark(), "BRMRK_BLANK" ) . '>' . BRMRK_BLANK . '</option>';
-	echo '			<option value="BRMRK_REG_MARK" ' . selected( $brand_5->get_mark(), "BRMRK_REG_MARK" ) . '>' . BRMRK_REG_MARK . '</option>';
-	echo '			<option value="BRMRK_TRADE_MARK" ' . selected( $brand_5->get_mark(), "BRMRK_TRADE_MARK" ) . '>' . BRMRK_TRADE_MARK . '</option>';
+	echo '			<option value="brmrk_MarkTags::BLANK" ' . selected( $brand_5->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
+	echo '			<option value="brmrk_MarkTags::REGISTERED" ' . selected( $brand_5->get_mark(), brmrk_MarkTags::REGISTERED_TAG ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
+	echo '			<option value="brmrk_MarkTags::TRADE_MARK" ' . selected( $brand_5->get_mark(), brmrk_MarkTags::TRADEMARK_TAG ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
 	echo '		</select>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_5]" value="' . BRMRK_CASE_SENSITIVE . '"' . checked( $brand_5->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
 	echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_5]" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand_5->apply_only_once(), true, false ) . '>Apply Only Once</label>';
@@ -308,18 +290,15 @@ function brmrk_addbrand( $content, brmrk_BrandModel $brand ) {
 	Parse $content, ensuring occurrences of $brand have the appropriate trademark symbol afterwards
 */
 function brmrk_setbranding( $content, brmrk_BrandModel $brand ) {
-	global $BRMRK_REG_MARK;
-	global $BRMRK_TRADE_MARK;
-
 	$name = $brand->get_brand();
 
 	if ( ( isset( $name ) ) && ( strlen( trim( $name ) ) > 0 ) ) {
 		$temp_storage = $content;
 
-		foreach ( $BRMRK_REG_MARK as $value ) {
+		foreach ( brmrk_MarkTags::get_array_registered_marks() as $value ) {
 			$temp_storage = brmrk_removebranding( $temp_storage, $brand, $value );
 		}
-		foreach ( $BRMRK_TRADE_MARK as $value ) {
+		foreach ( brmrk_MarkTags::get_array_trade_marks() as $value ) {
 			$temp_storage = brmrk_removebranding( $temp_storage, $brand, $value );
 		}
 
@@ -337,11 +316,11 @@ function brmrk_update_content( $content ) {
 	$brand_marks_arr = get_option( BRMRK_MARKS );
 
 	// set options to variables
-	$brand_1 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_1'] ), $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
-	$brand_2 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_2'] ), $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
-	$brand_3 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_3'] ), $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
-	$brand_4 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_4'] ), $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
-	$brand_5 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_5'] ), $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
+	$brand_1 = new brmrk_BrandModel($brand_marks_arr['brand_1'] , $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
+	$brand_2 = new brmrk_BrandModel( $brand_marks_arr['brand_2'] , $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
+	$brand_3 = new brmrk_BrandModel( $brand_marks_arr['brand_3'] , $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
+	$brand_4 = new brmrk_BrandModel( $brand_marks_arr['brand_4'] , $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
+	$brand_5 = new brmrk_BrandModel( $brand_marks_arr['brand_5'] , $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
 
 	$content = brmrk_setbranding( $content, $brand_1 );
 	$content = brmrk_setbranding( $content, $brand_2 );
@@ -360,11 +339,11 @@ function brmrk_update_excerpt( $excerpt ) {
 	$brand_marks_arr = get_option( BRMRK_MARKS );
 
 	// set options to variables
-	$brand_1 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_1'] ), $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
-	$brand_2 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_2'] ), $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
-	$brand_3 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_3'] ), $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
-	$brand_4 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_4'] ), $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
-	$brand_5 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_5'] ), $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
+	$brand_1 = new brmrk_BrandModel($brand_marks_arr['brand_1'] , $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
+	$brand_2 = new brmrk_BrandModel( $brand_marks_arr['brand_2'] , $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
+	$brand_3 = new brmrk_BrandModel( $brand_marks_arr['brand_3'] , $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
+	$brand_4 = new brmrk_BrandModel( $brand_marks_arr['brand_4'] , $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
+	$brand_5 = new brmrk_BrandModel( $brand_marks_arr['brand_5'] , $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
 
 	$excerpt = brmrk_setbranding( $excerpt, $brand_1 );
 	$excerpt = brmrk_setbranding( $excerpt, $brand_2 );
@@ -383,11 +362,11 @@ function brmrk_update_title( $title ) {
 	$brand_marks_arr = get_option( BRMRK_MARKS );
 
 	// set options to variables
-	$brand_1 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_1'] ), $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
-	$brand_2 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_2'] ), $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
-	$brand_3 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_3'] ), $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
-	$brand_4 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_4'] ), $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
-	$brand_5 = new brmrk_BrandModel(esc_attr( $brand_marks_arr['brand_5'] ), $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
+	$brand_1 = new brmrk_BrandModel($brand_marks_arr['brand_1'] , $brand_marks_arr['mark_1'], $brand_marks_arr['case_1'], $brand_marks_arr['once_1']);
+	$brand_2 = new brmrk_BrandModel( $brand_marks_arr['brand_2'] , $brand_marks_arr['mark_2'], $brand_marks_arr['case_2'], $brand_marks_arr['once_2']);
+	$brand_3 = new brmrk_BrandModel( $brand_marks_arr['brand_3'] , $brand_marks_arr['mark_3'], $brand_marks_arr['case_3'], $brand_marks_arr['once_3']);
+	$brand_4 = new brmrk_BrandModel( $brand_marks_arr['brand_4'] , $brand_marks_arr['mark_4'], $brand_marks_arr['case_4'], $brand_marks_arr['once_4']);
+	$brand_5 = new brmrk_BrandModel( $brand_marks_arr['brand_5'] , $brand_marks_arr['mark_5'], $brand_marks_arr['case_5'], $brand_marks_arr['once_5']);
 
 
 	$title = brmrk_setbranding( $title, $brand_1 );
