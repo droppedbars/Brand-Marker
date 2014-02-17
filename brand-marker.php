@@ -3,7 +3,7 @@
 Plugin Name: Brand Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 Description: Never forget to mark your brand or trademarks again. Automatically add TM or (R) to trademarks in post title, excerpt and content. Activate, and open 'Settings->Brand Marker'.  Enter in the brands you wish to have marked and check off case sensitivity and frequency of marking.
-Version: 0.4.2
+Version: 0.4.3
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
@@ -67,7 +67,6 @@ function brmrk_install() {
 		wp_die( 'This plugin requires WordPress version 3.8 or higher.' );
 	}
 
-
 	if ( ! get_option( BRMRK_MARKS ) ) {
 		$brand_marks_arr = array( 'brand_1' => 'BrandMarker', 'mark_1' => brmrk_MarkTags::TRADEMARK_TAG, 'case_1' => true, 'once_1' => false, 'brand_2' => '', 'mark_2' => brmrk_MarkTags::BLANK_TAG, 'case_2' => false, 'once_2' => false, 'brand_3' => '', 'mark_3' => brmrk_MarkTags::BLANK_TAG, 'case_3' => false, 'once_3' => false, 'brand_4' => '', 'mark_4' => brmrk_MarkTags::BLANK_TAG, 'case_4' => false, 'once_4' => false, 'brand_5' => '', 'mark_5' => brmrk_MarkTags::BLANK_TAG, 'case_5' => false, 'once_5' => false );
 		// update the database with the default option values
@@ -79,7 +78,7 @@ function brmrk_install() {
 	Called via the init hook.
 */
 function brmrk_init() {
-	// nothing to initialize for this plugin
+	wp_register_script( 'brmrk_settings_handler', plugins_url( 'assets/settingsHandler.js', __FILE__ ) );
 }
 
 /*
@@ -87,9 +86,24 @@ function brmrk_init() {
 	Define and create the sub-menu item for the plugin under options menu
 */
 function brmrk_menu() {
-	add_options_page( __( BRMRK_SETTINGS_PAGE_NAME, BRMRK_PLUGIN_TAG ),
+	$page_hook_suffix = add_options_page( __( BRMRK_SETTINGS_PAGE_NAME, BRMRK_PLUGIN_TAG ),
 			__( BRMRK_SETTINGS_NAME, BRMRK_PLUGIN_TAG ),
 			BRMRK_WP_USER_MANAGE_OPTS, BRMRK_SETTINGS_PAGE_URL, BRMRK_FNC_SETTINGS_PAGE );
+
+	/*
+   * Use the retrieved $page_hook_suffix to hook the function that links our script.
+   * This hook invokes the function only on our plugin administration screen,
+   * see: http://codex.wordpress.org/Administration_Menus#Page_Hook_Suffix
+   */
+	add_action('admin_print_scripts-' . $page_hook_suffix, 'my_plugin_admin_scripts');
+}
+
+/*
+ *
+ */
+function my_plugin_admin_scripts() {
+	/* Link our already registered script to a page */
+	wp_enqueue_script( 'brmrk_settings_handler' );
 }
 
 /*
@@ -102,6 +116,8 @@ function brmrk_page() {
 	if ( ! current_user_can( BRMRK_WP_USER_MANAGE_OPTS ) ) {
 		wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
 	}
+
+
 	// load options
 	$brand_marks_arr = get_option( BRMRK_MARKS );
 	// set options to variables
@@ -124,6 +140,7 @@ function brmrk_page() {
 	settings_fields( BRMRK_SETTINGS );
 
 	for ( $i = 0; $i < 5; $i ++ ) {
+		echo '		<input type="button" class="button-primary" value="-" onclick=""/>';
 		echo '		<input type="text" name="' . BRMRK_MARKS . '[brand_' . ( $i + 1 ) . ']" value="' . $brand[$i]->get_brand() . '" size="24">';
 		echo '		<select name="' . BRMRK_MARKS . '[mark_' . ( $i + 1 ) . ']">';
 		echo '			<option value="' . brmrk_MarkTags::BLANK_TAG . '" ' . selected( $brand[$i]->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
@@ -134,6 +151,7 @@ function brmrk_page() {
 		echo '		<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_' . ( $i + 1 ) . ']" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand[$i]->apply_only_once(), true, false ) . '>Apply Only Once</label>';
 		echo '		<br>';
 	}
+	echo ' 		<input type="button" class="button-primary" value="Add Brand" onclick="brmrk_addRowOnClick()"/><p>';
 
 	echo '		<input type="submit" class="button-primary" value="';
 	_e( 'Save Changes', BRMRK_PLUGIN_TAG );

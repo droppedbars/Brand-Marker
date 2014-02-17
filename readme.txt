@@ -1,6 +1,6 @@
 === Brand-Marker ===
 Contributors: droppedbars
-Donate link:
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D7J2RY6828E7N
 Tags: trademark, symbol, registered, branding, brand, mark
 Requires at least: 3.8
 Tested up to: 3.8.1
@@ -57,6 +57,9 @@ That's okay.  Brand Marker will remove any existing trademark symbols from brand
 1. Configuration settings for Brand Marker, found under the "settings" menu.
 
 == Changelog ==
+
+* 0.4.x =
+* Add flexible number of brands
 
 = 0.3.2 =
 * Initial release. Support for five brands.
