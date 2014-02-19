@@ -2,9 +2,10 @@
  * Created by patrick on 14-02-15.
  */
 
+//TODO: make constants and text pull from a common file as PHP code
 function brmrk_addRowOnClick() {
 	var rowCounter = document.getElementById('rowCounter');
-	rowCounter.value = rowCounter.value++;
+
 	var rowName = 'brmrk_options[brand_'+rowCounter.value+']';
 
 	var newRemoveButton = document.createElement('input');
@@ -35,21 +36,44 @@ function brmrk_addRowOnClick() {
 	newSelect.appendChild(registeredOption);
 	newSelect.appendChild(trademarkOption);
 
-	//echo '			<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_' . $i . ']" value="' . BRMRK_CASE_SENSITIVE . '" ' . checked( $brand[$i]->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
-	//echo '			<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_'.$i . ']" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brand[$i]->apply_only_once(), true, false ) . '>Apply Only Once</label>';
+	var newCaseSensitive = document.createElement('input');
+	newCaseSensitive.setAttribute('type', 'checkbox');
+	newCaseSensitive.setAttribute('name', 'brmrk_options[case_'+rowCounter.value+']');
 
+	var newCaseSensitiveLabel = document.createElement('label');
+	newCaseSensitiveLabel.htmlFor = 'brmrk_options[case_'+rowCounter.value+']';
+	newCaseSensitiveLabel.appendChild(newCaseSensitive);
+	newCaseSensitiveLabel.appendChild(document.createTextNode('Case Sensitive'));
+
+	var newOnceOnly = document.createElement('input');
+	newOnceOnly.setAttribute('type', 'checkbox');
+	newOnceOnly.setAttribute('name', 'brmrk_options[once_'+rowCounter.value+']');
+
+	var newOnceOnlyLabel = document.createElement('label');
+	newOnceOnlyLabel.htmlFor = 'brmrk_options[once_'+rowCounter.value+']';
+	newOnceOnlyLabel.appendChild(newOnceOnly);
+	newOnceOnlyLabel.appendChild(document.createTextNode('Apply Only Once'));
 
 	var newBR = document.createElement('br');
 
 	var newRowDiv = document.createElement('div');
 	newRowDiv.setAttribute('id', 'brmrk_row_' + rowCounter.value);
 	newRowDiv.appendChild(newRemoveButton);
+	newRowDiv.appendChild(document.createTextNode(' '));
 	newRowDiv.appendChild(newBrandText);
+	newRowDiv.appendChild(document.createTextNode(' '));
 	newRowDiv.appendChild(newSelect);
+	newRowDiv.appendChild(document.createTextNode(' '));
+	newRowDiv.appendChild(newCaseSensitiveLabel);
+	newRowDiv.appendChild(document.createTextNode(' '));
+	newRowDiv.appendChild(newOnceOnlyLabel);
+	newRowDiv.appendChild(document.createTextNode(' '));
 	newRowDiv.appendChild(newBR);
 
 	var mainDiv = document.getElementById('brmrk_brandRows');
 	mainDiv.appendChild(newRowDiv);
+
+	rowCounter.value = ++rowCounter.value;
 }
 
 function brmrk_removeRowOnClick(row) {
