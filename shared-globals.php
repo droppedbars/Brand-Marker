@@ -26,4 +26,4 @@ define( "BRMRK_SETTINGS_PAGE_NAME", 'Brand-Marker' );
 define( "BRMRK_SETTINGS_NAME", 'Brand-Marker' );
 define( "BRMRK_SETTINGS_PAGE_URL", 'brand-settings' );
 
-define( "DB_VERSION", '1.0');
+define( "DB_VERSION", '1.0' );
