@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: trademark, symbol, registered, branding, brand, mark
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 0.3.2
+Stable tag: 0.4.4
 Author URI: http://patrick.mauro.ca
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
@@ -62,8 +62,9 @@ That's okay.  Brand Marker will remove any existing trademark symbols from brand
 
 == Changelog ==
 
-* 0.4.x =
+* 0.4.4 =
 * Add flexible number of brands
+* Support for WordPress 3.5 and up (also tested on PHP 5.2.17)
 
 = 0.3.2 =
 * Initial release. Support for five brands.
@@ -76,7 +77,6 @@ None
 
 Some items planned for in the future:
 
-* dynamic number of brands
 * replace brands with images, spans or divs
 * dynamic shortcodes for brands
 * support for multi-site setups
