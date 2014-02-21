@@ -62,8 +62,8 @@ define( "BRMRK_ONCE_ONLY", 'once' );
 function brmrk_install() {
 	// check the install version
 	global $wp_version;
-	if ( version_compare( $wp_version, '3.8', '<' ) ) {
-		wp_die( 'This plugin requires WordPress version 3.8 or higher.' );
+	if ( version_compare( $wp_version, '3.5', '<' ) ) {
+//		wp_die( 'This plugin requires WordPress version 3.5 or higher.' );
 	}
 
 	if ( ! get_option( BRMRK_MARKS ) ) {
@@ -110,17 +110,18 @@ function brmrk_admin_scripts() {
 /*
  * return an array of brmrk_BrandModel objects from the wordpress options array.
  */
-function brmrk_generateBrandObjects( Array $brand_marks_arr ) {
+function brmrk_generateBrandObjects( $brand_marks_arr ) {
 	$iterator     = 0;
 	$brandObjects = Array();
-	foreach ( $brand_marks_arr as $key => $value ) {
-		if ( preg_match( '/^brand_(.*[0-9]$)/', $key, $matches ) === 1 ) {
-			$matched_iterator        = $matches[1];
-			$brandObjects[$iterator] = new brmrk_BrandModel( $brand_marks_arr['brand_' . $matched_iterator], $brand_marks_arr['mark_' . $matched_iterator], $brand_marks_arr['case_' . $matched_iterator], $brand_marks_arr['once_' . $matched_iterator] );
-			$iterator ++;
+	if (is_array($brand_marks_arr)) {
+		foreach ( $brand_marks_arr as $key => $value ) {
+			if ( preg_match( '/^brand_(.*[0-9]$)/', $key, $matches ) === 1 ) {
+				$matched_iterator        = $matches[1];
+				$brandObjects[$iterator] = new brmrk_BrandModel( $brand_marks_arr['brand_' . $matched_iterator], $brand_marks_arr['mark_' . $matched_iterator], $brand_marks_arr['case_' . $matched_iterator], $brand_marks_arr['once_' . $matched_iterator] );
+				$iterator ++;
+			}
 		}
 	}
-
 	return $brandObjects;
 }
 
