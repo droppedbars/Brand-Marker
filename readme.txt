@@ -35,7 +35,7 @@ Brand-Marker will parse your posts on the fly and ensure that the appropriate tr
 1. Click 'Plugins > Add New'
 1. Search for 'Brand-Marker'
 1. Activate Brand Marker from your Plugins page
-1. Click 'Settings > Brand Marker'
+1. Click 'Settings > Brand-Marker'
 1. Enter in your brands that require trademark symbols, select the trademark symbol and click 'Save Changes'
 
 = Through WordPress.org =
@@ -43,7 +43,7 @@ Brand-Marker will parse your posts on the fly and ensure that the appropriate tr
 1. Download Brand-Marker
 1. Upload or copy the 'Brand-Marker' directory to your '/wp-content/plugins/' directory using your preferred method
 1. Activate Brand-Mark from your Plugins page
-1. Click 'Settings > Brand Marker'
+1. Click 'Settings > Brand-Marker'
 1. Enter in your brands that require trademark symbols, select the trademark symbol and click 'Save Changes'
 
 == Frequently Asked Questions ==
@@ -54,7 +54,7 @@ To ensure you don't wind up with two trademark symbols, add "Brand X" as the fir
 
 = What happens if a user already put in a trademark symbol? =
 
-That's okay.  Brand Marker will remove any existing trademark symbols from brands that you specify prior to applying the appropriate trademark symbol.
+That's okay.  Brand-Marker will remove any existing trademark symbols from brands that you specify prior to applying the appropriate trademark symbol.
 
 == Screenshots ==
 
