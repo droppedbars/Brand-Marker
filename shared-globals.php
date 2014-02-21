@@ -20,7 +20,10 @@ define( "BRMRK_WP_THE_TITLE", 'the_title' );
 /* Plugin Variables and Attributes */
 define( "BRMRK_PLUGIN_TAG", 'brand_marker' );
 define( "BRMRK_MARKS", 'brmrk_options' );
+define( "BRMRK_DB_VERS", 'brmrk_db_version' );
 define( "BRMRK_SETTINGS", 'brmrk-settings-group' );
-define( "BRMRK_SETTINGS_PAGE_NAME", 'Brand Marker' );
-define( "BRMRK_SETTINGS_NAME", 'Brand Marker' );
+define( "BRMRK_SETTINGS_PAGE_NAME", 'Brand-Marker' );
+define( "BRMRK_SETTINGS_NAME", 'Brand-Marker' );
 define( "BRMRK_SETTINGS_PAGE_URL", 'brand-settings' );
+
+define( "DB_VERSION", '1.0' );

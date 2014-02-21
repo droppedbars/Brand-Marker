@@ -1,8 +1,8 @@
 === Brand-Marker ===
 Contributors: droppedbars
-Donate link:
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=D7J2RY6828E7N
 Tags: trademark, symbol, registered, branding, brand, mark
-Requires at least: 3.8
+Requires at least: 3.5
 Tested up to: 3.8.1
 Stable tag: 0.3.2
 Author URI: http://patrick.mauro.ca
@@ -25,6 +25,10 @@ Brand-Marker will parse your posts on the fly and ensure that the appropriate tr
 * Trademark symbols applied to brands in post content, post titles, and post excerpts
 
 == Installation ==
+
+* Minimum tested/supported WordPress version: 3.5
+* Minimum tested PHP version: 5.2.17
+* Other requirements: Javascript required for Settings Page
 
 = Through your WordPress Installation =
 
@@ -57,6 +61,9 @@ That's okay.  Brand Marker will remove any existing trademark symbols from brand
 1. Configuration settings for Brand Marker, found under the "settings" menu.
 
 == Changelog ==
+
+* 0.4.x =
+* Add flexible number of brands
 
 = 0.3.2 =
 * Initial release. Support for five brands.
