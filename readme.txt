@@ -20,7 +20,7 @@ Brand-Marker will parse your posts on the fly and ensure that the appropriate tr
 
 == Features ==
 
-* Define up to five brands to have trademark symbols applied
+* Define brands to have trademark symbols applied
 * Allow the brands to be case sensitive, or case insensitive
 * Trademark symbols applied to brands in post content, post titles, and post excerpts
 
