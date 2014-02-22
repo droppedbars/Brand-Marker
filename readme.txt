@@ -62,7 +62,7 @@ That's okay.  Brand-Marker will remove any existing trademark symbols from brand
 
 == Changelog ==
 
-* 0.4.4 =
+= 0.4.4 =
 * Add flexible number of brands
 * Support for WordPress 3.5 and up (also tested on PHP 5.2.17)
 
