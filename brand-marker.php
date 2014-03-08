@@ -3,7 +3,7 @@
 Plugin Name: Brand-Marker
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 Description: Never forget to mark your brand or trademarks again. Automatically add TM or (R) to trademarks in post title, excerpt and content. Activate, and open 'Settings->Brand Marker'.  Enter in the brands you wish to have marked and check off case sensitivity and frequency of marking.
-Version: 0.4.4
+Version: 0.4.5
 Author: Patrick Mauro
 Author URI: http://patrick.mauro.ca
 License: GPLv2
@@ -113,7 +113,7 @@ function brmrk_admin_scripts() {
 function brmrk_generateBrandObjects( $brand_marks_arr ) {
 	$iterator     = 0;
 	$brandObjects = Array();
-	if (is_array($brand_marks_arr)) {
+	if ( is_array( $brand_marks_arr ) ) {
 		foreach ( $brand_marks_arr as $key => $value ) {
 			if ( preg_match( '/^brand_(.*[0-9]$)/', $key, $matches ) === 1 ) {
 				$matched_iterator        = $matches[1];
@@ -122,6 +122,7 @@ function brmrk_generateBrandObjects( $brand_marks_arr ) {
 			}
 		}
 	}
+
 	return $brandObjects;
 }
 
@@ -160,9 +161,9 @@ function brmrk_page() {
 		echo '			<input type="button" class="button-primary" value="-" onclick="brmrk_removeRowOnClick(\'brmrk_row_' . $i . '\')"/>';
 		echo '			<input type="text" name="' . BRMRK_MARKS . '[brand_' . $i . ']" value="' . $brands[$i]->get_brand() . '" size="24">';
 		echo '			<select name="' . BRMRK_MARKS . '[mark_' . $i . ']">';
-		echo '				<option value="' . brmrk_MarkTags::BLANK_TAG . '" ' . selected( $brands[$i]->get_mark(), brmrk_MarkTags::BLANK_TAG ) . '>' . brmrk_MarkTags::BLANK . '</option>';
-		echo '				<option value="' . brmrk_MarkTags::REGISTERED_TAG . '" ' . selected( $brands[$i]->get_mark(), brmrk_MarkTags::REGISTERED_TAG ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
-		echo '				<option value="' . brmrk_MarkTags::TRADEMARK_TAG . '" ' . selected( $brands[$i]->get_mark(), brmrk_MarkTags::TRADEMARK_TAG ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
+		echo '				<option value="' . brmrk_MarkTags::BLANK_TAG . '" ' . selected( $brands[$i]->get_mark(), brmrk_MarkTags::BLANK_TAG, false ) . '>' . brmrk_MarkTags::BLANK . '</option>';
+		echo '				<option value="' . brmrk_MarkTags::REGISTERED_TAG . '" ' . selected( $brands[$i]->get_mark(), brmrk_MarkTags::REGISTERED_TAG, false ) . '>' . brmrk_MarkTags::REGISTERED . '</option>';
+		echo '				<option value="' . brmrk_MarkTags::TRADEMARK_TAG . '" ' . selected( $brands[$i]->get_mark(), brmrk_MarkTags::TRADEMARK_TAG, false ) . '>' . brmrk_MarkTags::TRADE_MARK . '</option>';
 		echo '			</select>';
 		echo '			<label><input type="checkbox" name="' . BRMRK_MARKS . '[case_' . $i . ']" value="' . BRMRK_CASE_SENSITIVE . '" ' . checked( $brands[$i]->is_case_sensitive(), true, false ) . '>Case Sensitive</label>';
 		echo '			<label><input type="checkbox" name="' . BRMRK_MARKS . '[once_' . $i . ']" value="' . BRMRK_ONCE_ONLY . '" ' . checked( $brands[$i]->apply_only_once(), true, false ) . '>Apply Only Once</label>';

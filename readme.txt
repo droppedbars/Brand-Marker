@@ -4,7 +4,7 @@ Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: trademark, symbol, registered, branding, brand, mark
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 0.4.4
+Stable tag: 0.4.5
 Author URI: http://patrick.mauro.ca
 Plugin URI: http://github.com/droppedbars/Brand-Marker
 License: GPLv2 or later
@@ -23,6 +23,7 @@ Brand-Marker will parse your posts on the fly and ensure that the appropriate tr
 * Define brands to have trademark symbols applied
 * Allow the brands to be case sensitive, or case insensitive
 * Trademark symbols applied to brands in post content, post titles, and post excerpts
+* Supports single site or individual sites on multisite installations
 
 == Installation ==
 
@@ -62,6 +63,10 @@ That's okay.  Brand-Marker will remove any existing trademark symbols from brand
 
 == Changelog ==
 
+= 0.4.5 =
+* Minor bug fix, selected tags were occuring in HTML text when they shouldn't
+* Tested with 3.8.1 multisite
+
 = 0.4.4 =
 * Add flexible number of brands
 * Support for WordPress 3.5 and up (also tested on PHP 5.2.17)
@@ -79,6 +84,5 @@ Some items planned for in the future:
 
 * replace brands with images, spans or divs
 * dynamic shortcodes for brands
-* support for multi-site setups
 
 If you have requests, then mosey on over to http://github.com/droppedbars/Brand-Marker and let me know.
